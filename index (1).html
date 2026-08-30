@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Drink It — Your Party, Delivered</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --void:#14100F;
+  --surface:#1E1815;
+  --surface-2:#241D19;
+  --stroke:#332924;
+  --wine:#8C1F3B;
+  --wine-bright:#B32A4D;
+  --gold:#C9A15A;
+  --gold-soft:#E4C98A;
+  --cream:#F3ECE1;
+  --muted:#9C9086;
+  --muted-2:#6E645C;
+  --good:#5FA671;
+  --radius:18px;
+  --radius-sm:10px;
+  --font-display:'Fraunces', serif;
+  --font-body:'Sora', sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--void);
+  color:var(--cream);
+  font-family:var(--font-body);
+  padding-bottom:78px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%; display:block;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer; border:none;}
+::selection{background:var(--wine); color:var(--cream);}
+:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px;}
+.eyebrow{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); display:flex; align-items:center; gap:8px; margin-bottom:10px;
+}
+.eyebrow::before{content:''; width:14px; height:1px; background:var(--gold);}
+h2.section-title{
+  font-family:var(--font-display); font-weight:600; font-size:clamp(22px,3.4vw,32px);
+  letter-spacing:-0.01em;
+}
+.section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:18px;}
+.see-all{font-size:13px; color:var(--muted); border-bottom:1px solid var(--stroke); padding-bottom:2px; white-space:nowrap;}
+section{padding:34px 0;}
+
+/* ============ AGE GATE ============ */
+#age-gate{
+  position:fixed; inset:0; background:rgba(10,8,7,0.92); backdrop-filter:blur(6px);
+  z-index:200; display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.age-card{
+  background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius);
+  max-width:380px; width:100%; padding:32px 28px; text-align:center;
+}
+.age-bottle{width:34px; height:34px; margin:0 auto 18px;}
+.age-card h1{font-family:var(--font-display); font-size:22px; font-weight:600; margin-bottom:10px;}
+.age-card p{color:var(--muted); font-size:14px; line-height:1.5; margin-bottom:22px;}
+.age-buttons{display:flex; gap:10px;}
+.age-buttons button{flex:1; padding:13px; border-radius:999px; font-weight:600; font-size:14px;}
+.btn-confirm{background:var(--gold); color:#241A0C;}
+.btn-decline{background:transparent; border:1px solid var(--stroke); color:var(--muted);}
+.age-fine{margin-top:16px; font-size:11px; color:var(--muted-2);}
+.hidden{display:none !important;}
+
+/* ============ HEADER ============ */
+header{
+  position:sticky; top:0; z-index:50; background:rgba(20,16,15,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--stroke);
+}
+.top-bar{display:flex; align-items:center; justify-content:space-between; padding:14px 20px; gap:14px;}
+.logo{display:flex; align-items:baseline; font-family:var(--font-display); font-weight:600; font-size:24px; letter-spacing:-0.01em; gap:1px;}
+.logo .bottle-i{
+  display:inline-block; width:16px; height:26px; position:relative; top:3px;
+  animation: pour-in 900ms cubic-bezier(.2,.8,.2,1) 200ms both;
+}
+.logo .bottle-i svg{width:100%; height:100%;}
+@keyframes pour-in{
+  0%{ transform: translateY(-14px) scaleY(0.4); opacity:0; }
+  60%{ opacity:1; }
+  100%{ transform: translateY(0) scaleY(1); opacity:1; }
+}
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--stroke);
+  display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0;
+}
+.icon-btn svg{width:18px; height:18px; stroke:var(--cream); fill:none;}
+.header-actions{display:flex; align-items:center; gap:8px;}
+.cart-dot{
+  position:absolute; top:-4px; right:-4px; background:var(--wine-bright); color:var(--cream);
+  font-family:var(--font-mono); font-size:10px; font-weight:600; min-width:16px; height:16px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; padding:0 3px;
+}
+.location-row{padding:0 20px 12px; display:flex; align-items:center; gap:6px; cursor:pointer;}
+.location-row svg{width:14px; height:14px; stroke:var(--gold); fill:none; flex-shrink:0;}
+.location-row .loc-text{font-size:12.5px; color:var(--cream); font-weight:600;}
+.location-row .loc-text span{color:var(--muted); font-weight:400;}
+.location-row .chevron{width:10px; height:10px; stroke:var(--muted); margin-left:2px;}
+.search-bar{
+  margin:0 20px 14px; background:var(--surface); border:1px solid var(--stroke); border-radius:999px;
+  display:flex; align-items:center; gap:10px; padding:12px 16px;
+}
+.search-bar svg{width:17px; height:17px; stroke:var(--muted); fill:none; flex-shrink:0;}
+.search-bar input{
+  background:none; border:none; color:var(--cream); font-size:14px; width:100%; font-family:var(--font-body);
+}
+.search-bar input::placeholder{color:var(--muted-2);}
+
+/* ============ LOCATION MODAL ============ */
+#location-modal{position:fixed; inset:0; background:rgba(10,8,7,0.85); z-index:150; display:flex; align-items:flex-end; justify-content:center;}
+.loc-sheet{background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-width:480px; padding:24px 22px 28px; border:1px solid var(--stroke); border-bottom:none;}
+.loc-sheet h3{font-family:var(--font-display); font-size:19px; margin-bottom:16px;}
+.loc-sheet input{
+  width:100%; background:var(--surface-2); border:1px solid var(--stroke); color:var(--cream); border-radius:var(--radius-sm);
+  padding:11px 13px; font-size:13.5px; margin-bottom:10px; font-family:var(--font-body);
+}
+.loc-row2{display:flex; gap:10px;}
+.loc-row2 input{flex:1;}
+.use-current{
+  display:flex; align-items:center; gap:8px; color:var(--gold); font-size:13px; font-weight:600; margin:12px 0 16px;
+}
+.use-current svg{width:15px; height:15px; stroke:var(--gold); fill:none;}
+.loc-save{width:100%; background:var(--gold); color:#241A0C; padding:13px; border-radius:999px; font-weight:700; font-size:14px;}
+.loc-close{position:absolute; margin-top:-8px;}
+
+/* ============ HERO BANNER ============ */
+.hero{
+  margin:16px 20px 0; border-radius:var(--radius); overflow:hidden; position:relative;
+  background:
+    radial-gradient(120% 140% at 15% 0%, rgba(140,31,59,0.55), transparent 55%),
+    radial-gradient(100% 120% at 100% 100%, rgba(201,161,90,0.25), transparent 60%),
+    linear-gradient(160deg, #241A17, #150F0D 70%);
+  padding:34px 24px;
+  border:1px solid var(--stroke);
+}
+.hero .eyebrow{color:var(--gold-soft);}
+.hero h1{
+  font-family:var(--font-display); font-weight:600; font-size:clamp(26px,6vw,40px); line-height:1.08;
+  max-width:420px; letter-spacing:-0.01em;
+}
+.hero h1 em{font-style:italic; color:var(--gold-soft);}
+.hero p{color:var(--muted); font-size:14px; margin:12px 0 20px; max-width:340px;}
+.hero-cta{display:flex; gap:10px; flex-wrap:wrap;}
+.btn-primary{background:var(--gold); color:#241A0C; padding:13px 24px; border-radius:999px; font-weight:700; font-size:14px;}
+.btn-ghost{background:transparent; border:1px solid var(--stroke); color:var(--cream); padding:13px 22px; border-radius:999px; font-weight:600; font-size:14px;}
+.hero-badge{
+  position:absolute; top:22px; right:22px; background:rgba(20,16,15,0.7); border:1px solid var(--stroke);
+  border-radius:999px; padding:7px 13px; font-family:var(--font-mono); font-size:11px; color:var(--gold-soft);
+  display:flex; align-items:center; gap:6px;
+}
+.hero-badge .dot{width:6px; height:6px; border-radius:50%; background:var(--good); animation:blink 1.6s ease infinite;}
+@keyframes blink{50%{opacity:0.3;}}
+
+/* ============ CATEGORIES ============ */
+.cat-scroll{
+  display:flex; gap:14px; overflow-x:auto; padding:4px 20px 8px; scrollbar-width:none;
+}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-item{
+  flex:0 0 auto; width:74px; display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.cat-circle{
+  width:60px; height:60px; border-radius:20px; background:var(--surface); border:1px solid var(--stroke);
+  display:flex; align-items:center; justify-content:center; font-size:24px; transition:transform .18s ease, border-color .18s ease;
+}
+.cat-item:active .cat-circle{transform:scale(0.93);}
+.cat-item span{font-size:11px; color:var(--muted); text-align:center; line-height:1.2;}
+
+/* ============ PRODUCT GRID ============ */
+.pgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+@media(min-width:640px){.pgrid{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:900px){.pgrid{grid-template-columns:repeat(4,1fr);}}
+.p-scroll{display:flex; gap:14px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none;}
+.p-scroll::-webkit-scrollbar{display:none;}
+.p-scroll .card{flex:0 0 168px;}
+
+.card{
+  background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius-sm);
+  padding:12px; position:relative; display:flex; flex-direction:column;
+}
+.card .thumb{
+  aspect-ratio:1/1.05; border-radius:10px; margin-bottom:10px; overflow:hidden; position:relative;
+  background:linear-gradient(145deg,#2A211D,#1A1512);
+  display:flex; align-items:center; justify-content:center;
+}
+.card .thumb svg{width:46%; height:70%;}
+.discount-tag{
+  position:absolute; top:8px; left:8px; background:var(--wine-bright); color:var(--cream);
+  font-family:var(--font-mono); font-size:10px; font-weight:600; padding:3px 7px; border-radius:6px;
+}
+.delivery-chip{
+  position:absolute; bottom:8px; left:8px; background:rgba(20,16,15,0.75); backdrop-filter:blur(3px);
+  color:var(--good); font-size:9.5px; font-family:var(--font-mono); padding:3px 7px; border-radius:6px;
+  display:flex; align-items:center; gap:4px;
+}
+.delivery-chip svg{width:9px; height:9px; stroke:var(--good); fill:none;}
+.card .brand{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;}
+.card .name{font-size:13.5px; font-weight:600; line-height:1.3; margin-bottom:2px; min-height:34px;}
+.card .size{font-size:11.5px; color:var(--muted-2); margin-bottom:8px;}
+.price-row{display:flex; align-items:baseline; gap:6px; margin-bottom:10px;}
+.price{font-family:var(--font-mono); font-weight:600; font-size:15px;}
+.mrp{font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2); text-decoration:line-through;}
+.add-zone{margin-top:auto;}
+.btn-add{
+  width:100%; background:var(--surface-2); border:1px solid var(--gold); color:var(--gold-soft);
+  padding:9px; border-radius:8px; font-weight:700; font-size:12.5px; letter-spacing:.03em;
+}
+.qty-control{
+  display:flex; align-items:center; justify-content:space-between; background:var(--gold); border-radius:8px;
+  overflow:hidden; height:34px;
+}
+.qty-control button{background:none; color:#241A0C; font-weight:800; font-size:16px; width:32px; height:100%;}
+.qty-control .qty-num{font-family:var(--font-mono); font-weight:700; color:#241A0C; font-size:14px;}
+
+/* ============ PROMO STRIP ============ */
+.promo-strip{
+  display:flex; gap:14px; overflow-x:auto; padding:2px 20px 8px; scrollbar-width:none;
+}
+.promo-strip::-webkit-scrollbar{display:none;}
+.promo-card{
+  flex:0 0 260px; border-radius:var(--radius-sm); padding:18px; position:relative; overflow:hidden;
+  border:1px solid var(--stroke); min-height:110px; display:flex; flex-direction:column; justify-content:flex-end;
+}
+.promo-card h4{font-family:var(--font-display); font-size:18px; font-weight:600;}
+.promo-card p{font-size:12px; color:var(--muted); margin-top:4px;}
+.promo-1{background:linear-gradient(135deg,rgba(140,31,59,0.5),rgba(20,16,15,1));}
+.promo-2{background:linear-gradient(135deg,rgba(201,161,90,0.35),rgba(20,16,15,1));}
+.promo-3{background:linear-gradient(135deg,rgba(95,166,113,0.3),rgba(20,16,15,1));}
+
+/* ============ BRAND CARDS ============ */
+.brand-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+@media(min-width:640px){.brand-grid{grid-template-columns:repeat(5,1fr);}}
+.brand-card{
+  background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius-sm);
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
+  font-family:var(--font-display); font-weight:600; font-size:13px; color:var(--muted);
+  transition:border-color .18s ease;
+}
+.brand-card .b-mark{width:26px; height:26px; border-radius:50%; border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--gold);}
+
+/* ============ FEATURE BLOCKS (Lever Point / Party Buddy / Safe Ride) ============ */
+.feature-block{
+  display:grid; grid-template-columns:1fr; gap:20px; align-items:center;
+  background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius); padding:26px; margin-bottom:16px;
+}
+@media(min-width:720px){.feature-block{grid-template-columns:1fr 1fr; padding:34px;}}
+.feature-icon-wrap{
+  width:52px; height:52px; border-radius:14px; background:var(--surface-2); border:1px solid var(--stroke);
+  display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+}
+.feature-icon-wrap svg{width:24px; height:24px; stroke:var(--gold); fill:none;}
+.feature-block h3{font-family:var(--font-display); font-size:21px; font-weight:600; margin-bottom:8px;}
+.feature-block p{color:var(--muted); font-size:13.5px; line-height:1.6; max-width:420px; margin-bottom:16px;}
+.feature-visual{
+  border-radius:var(--radius-sm); background:linear-gradient(160deg,#241A17,#150F0D); border:1px solid var(--stroke);
+  min-height:150px; display:flex; align-items:center; justify-content:center;
+}
+.feature-visual svg{width:80px; height:80px;}
+.chip-link{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--gold);}
+.chip-link svg{width:14px; height:14px; stroke:var(--gold); fill:none;}
+
+/* ============ WHY CHOOSE US ============ */
+.why-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+@media(min-width:720px){.why-grid{grid-template-columns:repeat(4,1fr);}}
+.why-card{background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius-sm); padding:20px 16px;}
+.why-card svg{width:22px; height:22px; stroke:var(--gold); fill:none; margin-bottom:12px;}
+.why-card h4{font-size:14.5px; font-weight:700; margin-bottom:6px;}
+.why-card p{font-size:12px; color:var(--muted); line-height:1.5;}
+
+/* ============ RESPONSIBLE MESSAGE ============ */
+.responsible{
+  margin:0 20px; border:1px solid rgba(201,161,90,0.35); background:rgba(201,161,90,0.06);
+  border-radius:var(--radius); padding:22px 24px; display:flex; gap:14px; align-items:flex-start;
+}
+.responsible svg{width:22px; height:22px; stroke:var(--gold); fill:none; flex-shrink:0; margin-top:2px;}
+.responsible h4{font-size:14.5px; font-weight:700; margin-bottom:4px;}
+.responsible p{font-size:12.5px; color:var(--muted); line-height:1.6;}
+
+/* ============ FOOTER ============ */
+footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px; background:var(--surface);}
+.foot-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:26px; margin-bottom:28px;}
+@media(min-width:720px){.foot-grid{grid-template-columns:2fr repeat(3,1fr);}}
+.foot-logo{font-family:var(--font-display); font-weight:600; font-size:20px; margin-bottom:10px; display:flex; align-items:baseline;}
+.foot-logo .bottle-i{width:13px; height:21px; display:inline-block; position:relative; top:2px;}
+.foot-tag{color:var(--muted); font-size:12.5px; line-height:1.6; max-width:260px;}
+.foot-col h5{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin-bottom:12px;}
+.foot-col a{display:block; color:var(--muted); font-size:13px; margin-bottom:9px;}
+.foot-bottom{display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; padding-top:20px; border-top:1px solid var(--stroke); font-size:11.5px; color:var(--muted-2);}
+
+/* ============ STICKY CART BAR ============ */
+#sticky-cart{
+  position:fixed; left:0; right:0; bottom:70px; z-index:60; display:flex; justify-content:center; padding:0 16px;
+  transform:translateY(120%); transition:transform .28s cubic-bezier(.2,.8,.2,1);
+}
+#sticky-cart.show{transform:translateY(0);}
+.cart-pill{
+  width:100%; max-width:480px; background:var(--gold); color:#241A0C; border-radius:999px;
+  padding:12px 8px 12px 20px; display:flex; align-items:center; justify-content:space-between;
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+.cart-pill .cart-info{font-size:13px; font-weight:700; font-family:var(--font-mono);}
+.cart-pill .cart-info span{display:block; font-family:var(--font-body); font-weight:400; font-size:10.5px; opacity:0.7;}
+.cart-pill button{
+  background:#241A0C; color:var(--gold-soft); padding:10px 18px; border-radius:999px; font-weight:700; font-size:13px;
+  display:flex; align-items:center; gap:6px;
+}
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav{
+  position:fixed; bottom:0; left:0; right:0; z-index:70; background:rgba(20,16,15,0.96); backdrop-filter:blur(10px);
+  border-top:1px solid var(--stroke); display:flex; justify-content:space-around; padding:9px 6px calc(9px + env(safe-area-inset-bottom));
+}
+.nav-item{display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--muted-2); font-size:10px; flex:1;}
+.nav-item svg{width:20px; height:20px; stroke:var(--muted-2); fill:none;}
+.nav-item.active{color:var(--gold);}
+.nav-item.active svg{stroke:var(--gold);}
+.nav-item .badge{position:relative;}
+.nav-item .badge .n{position:absolute; top:-6px; right:-8px; background:var(--wine-bright); color:var(--cream); font-size:8px; width:13px; height:13px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono);}
+
+/* ============ FLOATING RIDE BUTTON ============ */
+.ride-fab{
+  position:fixed; right:18px; bottom:150px; z-index:65; background:var(--wine); color:var(--cream);
+  border-radius:999px; padding:12px 16px; display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700;
+  box-shadow:0 8px 24px rgba(140,31,59,0.5); border:1px solid rgba(255,255,255,0.08);
+}
+.ride-fab svg{width:16px; height:16px; stroke:var(--cream); fill:none;}
+
+@media(min-width:900px){
+  .bottom-nav{display:none;}
+  .ride-fab{bottom:30px;}
+  #sticky-cart{bottom:24px;}
+  body{padding-bottom:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ AGE GATE ============ -->
+<div id="age-gate">
+  <div class="age-card">
+    <div class="age-bottle">
+      <svg viewBox="0 0 24 40" fill="none"><path d="M9 1h6v6l2.5 3.5V37a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V10.5L9 7V1z" stroke="#C9A15A" stroke-width="1.4"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#C9A15A" stroke-width="1.2"/></svg>
+    </div>
+    <h1>Before you come in</h1>
+    <p>Drink It delivers alcohol and party essentials. You need to be of legal drinking age in your state to continue.</p>
+    <div class="age-buttons">
+      <button class="btn-decline" onclick="declineAge()">I'm under age</button>
+      <button class="btn-confirm" onclick="confirmAge()">I'm 21 or older</button>
+    </div>
+    <p class="age-fine">By entering you confirm you're of legal drinking age. We card on delivery — every time.</p>
+  </div>
+</div>
+
+<!-- ============ LOCATION MODAL ============ -->
+<div id="location-modal" class="hidden">
+  <div class="loc-sheet">
+    <h3>Where should we deliver?</h3>
+    <input type="text" placeholder="House / Flat No.">
+    <input type="text" placeholder="Area / Street">
+    <div class="loc-row2">
+      <input type="text" placeholder="City">
+      <input type="text" placeholder="PIN Code">
+    </div>
+    <div class="use-current">
+      <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      Use current location
+    </div>
+    <button class="loc-save" onclick="saveLocation()">Save address</button>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="top-bar">
+    <div class="logo">DRINK<span class="bottle-i"><svg viewBox="0 0 24 40" fill="none"><path d="M9 1h6v6l2.5 3.5V37a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V10.5L9 7V1z" stroke="#C9A15A" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#C9A15A" stroke-width="1.3"/></svg></span>T</div>
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c1.5-4 4.2-6 7.5-6s6 2 7.5 6"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Cart" onclick="scrollToCart()">
+        <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="21" r="1.3"/><circle cx="17" cy="21" r="1.3"/></svg>
+        <span class="cart-dot" id="header-cart-count">0</span>
+      </button>
+    </div>
+  </div>
+  <div class="location-row" onclick="document.getElementById('location-modal').classList.remove('hidden')">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+    <span class="loc-text">Delivering to Indranagar <span>· 10 min</span></span>
+    <svg class="chevron" viewBox="0 0 24 24" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="text" placeholder="Search drinks, lassi, ORS, ice, snacks...">
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <span class="hero-badge"><span class="dot"></span> Live in Indranagar</span>
+    <p class="eyebrow">Quick Commerce · Party Edition</p>
+    <h1>Whatever the party<br>needs, <em>in minutes.</em></h1>
+    <p>Spirits, mixers, ice, snacks and everything in between — from shops near you, at the door before the playlist ends.</p>
+    <div class="hero-cta">
+      <a href="#popular" class="btn-primary">Order Now</a>
+      <a href="#brands" class="btn-ghost">Shop by Brand</a>
+    </div>
+  </div>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Browse</div>
+      <h2 class="section-title" style="margin-bottom:16px;">Quick categories</h2>
+    </div>
+    <div class="cat-scroll">
+      <div class="cat-item"><div class="cat-circle">🍾</div><span>Drinks</span></div>
+      <div class="cat-item"><div class="cat-circle">🥤</div><span>Soft Drinks</span></div>
+      <div class="cat-item"><div class="cat-circle">🧃</div><span>Lassi</span></div>
+      <div class="cat-item"><div class="cat-circle">⚡</div><span>ORS</span></div>
+      <div class="cat-item"><div class="cat-circle">🧊</div><span>Ice</span></div>
+      <div class="cat-item"><div class="cat-circle">🥤</div><span>Mixers</span></div>
+      <div class="cat-item"><div class="cat-circle">💧</div><span>Water</span></div>
+      <div class="cat-item"><div class="cat-circle">🍿</div><span>Popcorn</span></div>
+      <div class="cat-item"><div class="cat-circle">🌽</div><span>Nachos</span></div>
+      <div class="cat-item"><div class="cat-circle">🥜</div><span>Peanuts</span></div>
+      <div class="cat-item"><div class="cat-circle">🍟</div><span>Chips</span></div>
+      <div class="cat-item"><div class="cat-circle">🚬</div><span>Cigarettes</span></div>
+      <div class="cat-item"><div class="cat-circle">🎉</div><span>Party Kit</span></div>
+    </div>
+  </section>
+
+  <!-- ============ POPULAR PRODUCTS ============ -->
+  <section id="popular">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Trending now</div>
+          <h2 class="section-title">Popular this weekend</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="p-scroll" id="popular-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ PROMO STRIP ============ -->
+  <section style="padding-top:6px;">
+    <div class="wrap">
+      <div class="eyebrow">Offers</div>
+      <h2 class="section-title" style="margin-bottom:16px;">Special offers</h2>
+    </div>
+    <div class="promo-strip">
+      <div class="promo-card promo-1"><h4>Buy 2 Save 15%</h4><p>On select mixers & sodas</p></div>
+      <div class="promo-card promo-2"><h4>Party Combo</h4><p>Bottle + mixers + ice, bundled</p></div>
+      <div class="promo-card promo-3"><h4>Free ORS</h4><p>On orders above ₹999</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SHOP BY BRAND ============ -->
+  <section id="brands">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Drinks by Brand</div>
+          <h2 class="section-title">Shop by brand</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="brand-grid" id="brand-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ PARTY ESSENTIALS ============ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Set the scene</div>
+          <h2 class="section-title">Party essentials</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="p-scroll" id="essentials-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ PARTY COMBOS ============ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Bundled & discounted</div>
+          <h2 class="section-title">Party combos</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="p-scroll" id="combo-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ LASSI & REFRESHMENTS ============ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Cool down</div>
+          <h2 class="section-title">Lassi & refreshments</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="p-scroll" id="lassi-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ ORS & HYDRATION ============ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Morning after, sorted</div>
+          <h2 class="section-title">ORS & hydration</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="p-scroll" id="ors-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ SNACKS ============ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Something to munch</div>
+          <h2 class="section-title">Snacks</h2>
+        </div>
+        <a class="see-all" href="#">See all</a>
+      </div>
+      <div class="p-scroll" id="snacks-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ LEVER POINT (Bottle Recycling) ============ -->
+  <section>
+    <div class="wrap">
+      <div class="feature-block">
+        <div>
+          <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M4 4l3 3M20 4l-3 3M12 2v4"/><path d="M7 8h10l1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L7 8z"/><path d="M9 13l3 3 3-3"/></svg></div>
+          <h3>Lever Point</h3>
+          <p>Hand back your empty bottles when your next order arrives and earn Lever Points — credited straight to your Drink It wallet.</p>
+          <a class="chip-link" href="#">How it works <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="feature-visual">
+          <svg viewBox="0 0 100 100" fill="none"><path d="M40 8h20v18l10 14v46a6 6 0 0 1-6 6H36a6 6 0 0 1-6-6V40l10-14V8z" stroke="#C9A15A" stroke-width="2"/><path d="M28 60l8 8-8 8M72 60l-8 8 8 8" stroke="#8C1F3B" stroke-width="2"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SAFE RIDE (Oops! How Do I Go Home?) ============ -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="feature-block">
+        <div>
+          <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg></div>
+          <h3>Oops! How do I go home?</h3>
+          <p>Had one too many? Tap once for a verified ride home. No fumbling with three different apps at 1am — we call it for you.</p>
+          <a class="chip-link" href="#">Get a safe ride <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="feature-visual">
+          <svg viewBox="0 0 100 100" fill="none"><path d="M20 55l6-16a5 5 0 0 1 4.7-3h38.6a5 5 0 0 1 4.7 3l6 16" stroke="#C9A15A" stroke-width="2"/><rect x="14" y="55" width="72" height="20" rx="6" stroke="#C9A15A" stroke-width="2"/><circle cx="30" cy="79" r="5" stroke="#8C1F3B" stroke-width="2"/><circle cx="70" cy="79" r="5" stroke="#8C1F3B" stroke-width="2"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTY BUDDY ============ -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="feature-block">
+        <div>
+          <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 21c-4-3-8-6.4-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 4.6-4 8-8 11z"/></svg></div>
+          <h3>Party Buddy</h3>
+          <p>Tell us the vibe, headcount and budget — Party Buddy builds a cart of drinks, mixers and snacks so you don't have to think about it.</p>
+          <a class="chip-link" href="#">Build my cart <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="feature-visual">
+          <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="34" r="14" stroke="#C9A15A" stroke-width="2"/><path d="M22 82c2-16 12-24 28-24s26 8 28 24" stroke="#C9A15A" stroke-width="2"/><path d="M50 20v-8M38 24l-6-6M62 24l6-6" stroke="#8C1F3B" stroke-width="2"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY CHOOSE DRINK IT ============ -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">The short version</div>
+      <h2 class="section-title" style="margin-bottom:18px;">Why choose Drink It</h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>
+          <h4>Fast delivery</h4>
+          <p>From local shops near your address, not a warehouse three towns away.</p>
+        </div>
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7z"/></svg>
+          <h4>ID checked, every time</h4>
+          <p>Every delivery is age-verified at the door. No exceptions.</p>
+        </div>
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M20 7l-9 9-4-4"/><path d="M3 12a9 9 0 1 0 3-6.7"/></svg>
+          <h4>Clear pricing</h4>
+          <p>What you see is what you pay — no surprise charges at checkout.</p>
+        </div>
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/></svg>
+          <h4>Safe ride, always on</h4>
+          <p>One tap for a verified ride home whenever you need it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESPONSIBLE MESSAGE ============ -->
+  <section>
+    <div class="responsible">
+      <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+      <div>
+        <h4>Drink responsibly</h4>
+        <p>Drink It only delivers to and serves customers of legal drinking age. Please pace yourself, eat something, stay hydrated, and use Safe Ride if you've had more than you planned. We're here for a good night, not a hard morning.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FLOATING RIDE BUTTON ============ -->
+<div class="ride-fab" onclick="alert('Connecting you to a verified ride partner…')">
+  <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg>
+  Need a ride?
+</div>
+
+<!-- ============ STICKY CART ============ -->
+<div id="sticky-cart">
+  <div class="cart-pill">
+    <div class="cart-info" id="cart-info">0 Items <span>₹0 total</span></div>
+    <button>View Cart
+      <svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bottom-nav">
+  <a class="nav-item active" href="#">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+    Home
+  </a>
+  <a class="nav-item" href="#">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    Search
+  </a>
+  <a class="nav-item" href="#brands">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M4 8l1.5-4h13L20 8"/><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8z"/></svg>
+    Shop
+  </a>
+  <a class="nav-item badge" href="#" onclick="scrollToCart()">
+    <span class="badge">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="21" r="1.3"/><circle cx="17" cy="21" r="1.3"/></svg>
+      <span class="n" id="nav-cart-count">0</span>
+    </span>
+    Cart
+  </a>
+  <a class="nav-item" href="#">
+    <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c1.5-4 4.2-6 7.5-6s6 2 7.5 6"/></svg>
+    Account
+  </a>
+</nav>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">DRINK<span class="bottle-i"><svg viewBox="0 0 24 40" fill="none"><path d="M9 1h6v6l2.5 3.5V37a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V10.5L9 7V1z" stroke="#C9A15A" stroke-width="1.6"/></svg></span>T</div>
+        <p class="foot-tag">Your party. Your vibe. Everything you need, delivered from shops near you.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Shop</h5>
+        <a href="#">Drinks</a><a href="#">Party Essentials</a><a href="#">Combos</a><a href="#">Snacks</a>
+      </div>
+      <div class="foot-col">
+        <h5>Drink It</h5>
+        <a href="#">Lever Point</a><a href="#">Party Buddy</a><a href="#">Safe Ride</a><a href="#">Help</a>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <a href="#">Age Policy</a><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Licenses</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Drink It. Please drink responsibly.</span>
+      <span>Alcohol delivered only to verified addresses, to customers of legal drinking age.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---------- AGE GATE ----------
+function confirmAge(){
+  document.getElementById('age-gate').classList.add('hidden');
+  sessionStorage.setItem('drinkit-age-ok','1');
+}
+function declineAge(){
+  document.querySelector('.age-card').innerHTML =
+    '<h1>Come back later</h1><p style="color:var(--muted);font-size:14px;line-height:1.5;">Drink It is only for customers of legal drinking age. Thanks for understanding — see you when you\'re eligible.</p>';
+}
+if(sessionStorage.getItem('drinkit-age-ok')==='1'){
+  document.getElementById('age-gate').classList.add('hidden');
+}
+
+// ---------- LOCATION MODAL ----------
+function saveLocation(){
+  document.getElementById('location-modal').classList.add('hidden');
+}
+document.getElementById('location-modal').addEventListener('click', function(e){
+  if(e.target === this) this.classList.add('hidden');
+});
+
+// ---------- ORIGINAL ILLUSTRATED ICONS for product thumbs (no real brand art) ----------
+// Amber spirit/whisky bottle — warm gold glass, dark cap, liquid fill
+const whiskyBottleSVG = `<svg viewBox="0 0 40 64" fill="none">
+  <path d="M15 2h10v8l4 6v42a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3V16l4-6V2z" fill="#3A2A14" stroke="#C9A15A" stroke-width="1.2"/>
+  <path d="M12 30h16v27a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3V30z" fill="#B8791E"/>
+  <rect x="15" y="2" width="10" height="6" fill="#1B1310" stroke="#C9A15A" stroke-width="1"/>
+  <path d="M14 36c1-2 3-2 4 0s3 2 4 0 3-2 4 0" stroke="#F0D9A8" stroke-width="1" opacity="0.5"/>
+  <rect x="13" y="22" width="14" height="9" rx="1.5" fill="#150F0D" stroke="#C9A15A" stroke-width="0.8"/>
+  <text x="20" y="28" font-family="serif" font-size="5" fill="#C9A15A" text-anchor="middle">EST</text>
+</svg>`;
+// Wine bottle — deep bordeaux glass, foil neck
+const wineBottleSVG = `<svg viewBox="0 0 36 64" fill="none">
+  <path d="M14 2h8v8l3.5 5.5V58a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4V15.5L14 10V2z" fill="#3D0F1E" stroke="#C9A15A" stroke-width="1.1"/>
+  <rect x="14" y="2" width="8" height="7" fill="#8C1F3B"/>
+  <path d="M10.5 15.5h15V58a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4V15.5z" fill="#5A1526"/>
+  <ellipse cx="18" cy="14" rx="8" ry="2" fill="#8C1F3B" opacity="0.6"/>
+  <rect x="10.5" y="38" width="15" height="10" fill="#150F0D" stroke="#C9A15A" stroke-width="0.6"/>
+  <line x1="12" y1="42" x2="24" y2="42" stroke="#C9A15A" stroke-width="0.6"/>
+</svg>`;
+// Beer bottle — brown glass, foamy neck highlight, cap
+const beerBottleSVG = `<svg viewBox="0 0 34 64" fill="none">
+  <path d="M14 2h6v9l3 5v42a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V16l3-5V2z" fill="#5C3410" stroke="#C9A15A" stroke-width="1.1"/>
+  <rect x="14" y="2" width="6" height="5" fill="#232323" stroke="#C9A15A" stroke-width="0.8"/>
+  <path d="M9.5 32h15v20a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4V32z" fill="#7A4415"/>
+  <ellipse cx="17" cy="17" rx="4" ry="4" fill="#F0D9A8" opacity="0.35"/>
+  <rect x="9.5" y="24" width="15" height="8" rx="1" fill="#150F0D" stroke="#C9A15A" stroke-width="0.6"/>
+</svg>`;
+// Beer can — gold/silver metallic, ring pull
+const canSVG = `<svg viewBox="0 0 34 52" fill="none">
+  <rect x="6" y="6" width="22" height="42" rx="10" fill="#B8791E" stroke="#C9A15A" stroke-width="1.1"/>
+  <ellipse cx="17" cy="6" rx="11" ry="3" fill="#E4C98A" stroke="#C9A15A" stroke-width="1"/>
+  <ellipse cx="17" cy="48" rx="11" ry="3" fill="#8A5A16"/>
+  <rect x="6" y="20" width="22" height="14" fill="#150F0D" opacity="0.85"/>
+  <circle cx="17" cy="6" r="2.4" fill="none" stroke="#5C3D0E" stroke-width="1"/>
+</svg>`;
+// Wine glass — for lassi / refreshments / mixers section variety
+const cupSVG = `<svg viewBox="0 0 30 40" fill="none">
+  <path d="M7 4h16l-1.6 15c-0.6 5-3 8-6.4 8s-5.8-3-6.4-8L7 4z" fill="#E4C98A" opacity="0.25" stroke="#C9A15A" stroke-width="1.1"/>
+  <path d="M8.5 10h13" stroke="#C9A15A" stroke-width="0.8"/>
+  <rect x="14" y="27" width="2" height="9" fill="#C9A15A"/>
+  <ellipse cx="15" cy="37" rx="7" ry="1.6" fill="none" stroke="#C9A15A" stroke-width="1"/>
+</svg>`;
+// Snack bag — kraft-paper style pouch
+const bagSVG = `<svg viewBox="0 0 34 42" fill="none">
+  <path d="M6 12h22l-2 26a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3L6 12z" fill="#7A4415" stroke="#C9A15A" stroke-width="1.1"/>
+  <path d="M11 12V8a6 6 0 0 1 12 0v4" stroke="#C9A15A" stroke-width="1.1"/>
+  <rect x="9" y="18" width="16" height="6" rx="1" fill="#150F0D" opacity="0.7"/>
+</svg>`;
+// Ice cube tray
+const iceSVG = `<svg viewBox="0 0 40 40" fill="none">
+  <rect x="5" y="5" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.3" stroke="#C9A15A" stroke-width="1"/>
+  <rect x="21" y="5" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.5" stroke="#C9A15A" stroke-width="1"/>
+  <rect x="5" y="21" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.5" stroke="#C9A15A" stroke-width="1"/>
+  <rect x="21" y="21" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.3" stroke="#C9A15A" stroke-width="1"/>
+</svg>`;
+const bottleSVG = wineBottleSVG;
+
+// ---------- PRODUCT DATA ----------
+function product(brand,name,size,price,mrp,icon,delivery){
+  return {brand,name,size,price,mrp,icon,delivery};
+}
+const catalog = {
+  popular: [
+    product('Highland Reserve','Single Malt Whisky','750ml',3450,3800,whiskyBottleSVG,'~10 min'),
+    product('Vinaya Estates','Red Wine','750ml',1250,1450,wineBottleSVG,'~12 min'),
+    product('Northfield','Craft Beer 6-pack','330ml x6',720,800,beerBottleSVG,'~10 min'),
+    product('Clearwater','Soda Mixer','1L',80,100,cupSVG,'~8 min'),
+    product('Frostpack','Ice Cubes','2kg',99,120,iceSVG,'~9 min'),
+    product('Rooted','Classic Lassi','200ml',45,55,cupSVG,'~8 min'),
+  ],
+  essentials: [
+    product('PartyKit','Disposable Cups (Set of 20)','—',149,199,cupSVG,'~11 min'),
+    product('Frostpack','Ice Bag','5kg',199,240,iceSVG,'~10 min'),
+    product('Clearwater','Tonic Water 4-pack','250ml x4',180,220,canSVG,'~10 min'),
+    product('PartyKit','Napkins & Skewers','—',99,130,bagSVG,'~9 min'),
+  ],
+  combo: [
+    product('Drink It Combo','Whisky + Mixer + Ice Bundle','1 set',1899,2200,whiskyBottleSVG,'~12 min'),
+    product('Drink It Combo','Beer Night Pack','12 cans',1350,1550,canSVG,'~11 min'),
+    product('Drink It Combo','Wine & Snacks Combo','1 set',1650,1900,wineBottleSVG,'~12 min'),
+  ],
+  lassi: [
+    product('Rooted','Sweet Lassi','200ml',45,55,cupSVG,'~8 min'),
+    product('Rooted','Salted Lassi','200ml',45,55,cupSVG,'~8 min'),
+    product('Rooted','Mango Lassi','250ml',60,70,cupSVG,'~8 min'),
+  ],
+  ors: [
+    product('Hydra+','ORS Sachet','21g',25,30,bagSVG,'~7 min'),
+    product('Hydra+','Electrolyte Drink','200ml',40,50,cupSVG,'~7 min'),
+    product('PureLife','Packaged Water','1L',30,35,cupSVG,'~7 min'),
+  ],
+  snacks: [
+    product('Munch Co.','Salted Popcorn','150g',60,70,bagSVG,'~9 min'),
+    product('Munch Co.','Nacho Chips','200g',90,110,bagSVG,'~9 min'),
+    product('Munch Co.','Roasted Peanuts','250g',70,85,bagSVG,'~9 min'),
+    product('Munch Co.','Classic Chips','100g',50,60,bagSVG,'~8 min'),
+  ]
+};
+const brands = ['Highland Reserve','Vinaya Estates','Northfield','Clearwater','Rooted'];
+
+const cart = {}; // key -> qty
+
+function cardHTML(key, p){
+  const discount = Math.round((1 - p.price/p.mrp)*100);
+  return `
+  <div class="card" data-key="${key}">
+    <div class="thumb">
+      ${discount>0?`<span class="discount-tag">${discount}% OFF</span>`:''}
+      ${p.icon}
+      <span class="delivery-chip"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${p.delivery}</span>
+    </div>
+    <div class="brand">${p.brand}</div>
+    <div class="name">${p.name}</div>
+    <div class="size">${p.size}</div>
+    <div class="price-row">
+      <span class="price">₹${p.price}</span>
+      ${p.mrp>p.price?`<span class="mrp">₹${p.mrp}</span>`:''}
+    </div>
+    <div class="add-zone">${addZoneHTML(key)}</div>
+  </div>`;
+}
+
+function addZoneHTML(key){
+  const qty = cart[key] || 0;
+  if(qty === 0){
+    return `<button class="btn-add" onclick="changeQty('${key}',1)">ADD</button>`;
+  }
+  return `<div class="qty-control">
+    <button onclick="changeQty('${key}',-1)">−</button>
+    <span class="qty-num">${qty}</span>
+    <button onclick="changeQty('${key}',1)">+</button>
+  </div>`;
+}
+
+function renderGrid(id, items, prefix){
+  const el = document.getElementById(id);
+  el.innerHTML = items.map((p,i)=>cardHTML(prefix+'-'+i, p)).join('');
+}
+
+function renderBrands(){
+  const el = document.getElementById('brand-grid');
+  el.innerHTML = brands.map(b=>`
+    <div class="brand-card">
+      <div class="b-mark">${b[0]}</div>
+      ${b}
+    </div>`).join('');
+}
+
+function allProducts(){
+  return {
+    'popular': catalog.popular, 'essentials': catalog.essentials, 'combo': catalog.combo,
+    'lassi': catalog.lassi, 'ors': catalog.ors, 'snacks': catalog.snacks
+  };
+}
+
+function changeQty(key, delta){
+  const current = cart[key] || 0;
+  const next = Math.max(0, current + delta);
+  if(next === 0) delete cart[key]; else cart[key] = next;
+
+  // update just that card's add-zone
+  const cardEl = document.querySelector(`.card[data-key="${key}"] .add-zone`);
+  if(cardEl) cardEl.innerHTML = addZoneHTML(key);
+
+  updateCartUI();
+}
+
+function priceOf(key){
+  const [prefix, idx] = key.split('-');
+  const map = {popular:'popular', essentials:'essentials', combo:'combo', lassi:'lassi', ors:'ors', snacks:'snacks'};
+  return catalog[map[prefix]][idx].price;
+}
+
+function updateCartUI(){
+  let count = 0, total = 0;
+  for(const key in cart){
+    count += cart[key];
+    total += cart[key] * priceOf(key);
+  }
+  document.getElementById('header-cart-count').textContent = count;
+  document.getElementById('nav-cart-count').textContent = count;
+  document.getElementById('cart-info').innerHTML = `${count} Item${count!==1?'s':''} <span>₹${total} total</span>`;
+  document.getElementById('sticky-cart').classList.toggle('show', count > 0);
+}
+
+function scrollToCart(){
+  document.getElementById('sticky-cart').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// ---------- INIT ----------
+renderGrid('popular-grid', catalog.popular, 'popular');
+renderGrid('essentials-grid', catalog.essentials, 'essentials');
+renderGrid('combo-grid', catalog.combo, 'combo');
+renderGrid('lassi-grid', catalog.lassi, 'lassi');
+renderGrid('ors-grid', catalog.ors, 'ors');
+renderGrid('snacks-grid', catalog.snacks, 'snacks');
+renderBrands();
+updateCartUI();
+</script>
+</body>
+</html>
