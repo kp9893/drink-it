@@ -2083,7 +2083,378 @@ if (
   showDrinkUserName();
 }
 
+/* ================= DRINK IT FIXES ================= */
 
+(function () {
+
+  /* ---------- 1. BETTER TEXT VISIBILITY ---------- */
+
+  const fixStyle = document.createElement("style");
+
+  fixStyle.innerHTML = `
+    body {
+      color: #222 !important;
+    }
+
+    p, span, label, li {
+      color: #333 !important;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #111 !important;
+    }
+
+    /* Dark cards/sections */
+    .card p,
+    .feature-card p,
+    .service-card p,
+    .info-card p,
+    .service p {
+      color: #e8e8e8 !important;
+    }
+
+    .card h1,
+    .card h2,
+    .card h3,
+    .feature-card h1,
+    .feature-card h2,
+    .feature-card h3,
+    .service-card h1,
+    .service-card h2,
+    .service-card h3 {
+      color: #ffffff !important;
+    }
+
+    /* Service titles */
+    .service-card,
+    .feature-card,
+    .info-card {
+      color: #ffffff !important;
+    }
+
+    /* Links/buttons */
+    a, button {
+      font-weight: 700;
+    }
+
+    /* Yellow Blinkit-style buttons */
+    button {
+      border-color: transparent;
+    }
+
+    /* Modal text */
+    .drink-popup p {
+      color: #444 !important;
+    }
+
+    .drink-popup h2 {
+      color: #111 !important;
+    }
+  `;
+
+  document.head.appendChild(fixStyle);
+
+
+  /* ---------- 2. LEVER POINT ---------- */
+
+  function leverPoint() {
+
+    const bottles = prompt(
+      "How many empty bottles do you want to return?"
+    );
+
+    if (bottles === null) return;
+
+    const quantity = Number(bottles);
+
+    if (
+      !Number.isInteger(quantity) ||
+      quantity < 1
+    ) {
+      alert("Please enter a valid number of bottles.");
+      return;
+    }
+
+    const reward = quantity * 5;
+
+    alert(
+      "Lever Points\n\n" +
+      "Bottles: " + quantity + "\n" +
+      "Reward: ₹" + reward +
+      "\n\n₹5 will be credited per bottle."
+    );
+  }
+
+
+  /* ---------- 3. PARTY BUDDY ---------- */
+
+  function partyBuddy() {
+
+    const people = prompt(
+      "How many people do you need for Party Buddy?\nMaximum: 2 people\n₹300 per person"
+    );
+
+    if (people === null) return;
+
+    const quantity = Number(people);
+
+    if (
+      !Number.isInteger(quantity) ||
+      quantity < 1 ||
+      quantity > 2
+    ) {
+      alert(
+        "You can select maximum 2 people."
+      );
+      return;
+    }
+
+    const total = quantity * 300;
+
+    alert(
+      "Party Buddy\n\n" +
+      "People: " + quantity + "\n" +
+      "Price: ₹300 per person\n" +
+      "Total: ₹" + total
+    );
+  }
+
+
+  /* ---------- 4. SAFE RIDE ---------- */
+
+  function safeRide() {
+
+    const km = prompt(
+      "Enter the distance to your home in kilometres.\n\nCharge: ₹100 per kilometre"
+    );
+
+    if (km === null) return;
+
+    const distance = Number(km);
+
+    if (
+      isNaN(distance) ||
+      distance <= 0
+    ) {
+      alert("Please enter a valid distance.");
+      return;
+    }
+
+    const total = distance * 100;
+
+    alert(
+      "Safe Ride 🚗\n\n" +
+      "Distance: " + distance + " km\n" +
+      "Rate: ₹100/km\n" +
+      "Total Charge: ₹" + total
+    );
+  }
+
+
+  /* ---------- 5. FIND BUTTON/LINK BY TEXT ---------- */
+
+  function connectFeature(text, action) {
+
+    const elements =
+      document.querySelectorAll(
+        "button, a, div, span"
+      );
+
+    elements.forEach(function (element) {
+
+      const value =
+        element.textContent
+          .trim()
+          .toLowerCase();
+
+      if (
+        value === text.toLowerCase() ||
+        value.includes(text.toLowerCase())
+      ) {
+
+        if (
+          !element.dataset.drinkFeatureConnected
+        ) {
+
+          element.dataset.drinkFeatureConnected =
+            "true";
+
+          element.style.cursor = "pointer";
+
+          element.addEventListener(
+            "click",
+            function (event) {
+
+              event.preventDefault();
+              event.stopPropagation();
+
+              action();
+
+            }
+          );
+        }
+      }
+
+    });
+  }
+
+
+  /* ---------- 6. CONNECT LEVER POINT ---------- */
+
+  connectFeature(
+    "How it works",
+    leverPoint
+  );
+
+  connectFeature(
+    "Lever Point",
+    leverPoint
+  );
+
+
+  /* ---------- 7. CONNECT PARTY BUDDY ---------- */
+
+  connectFeature(
+    "Build my cart",
+    partyBuddy
+  );
+
+  connectFeature(
+    "Party Buddy",
+    partyBuddy
+  );
+
+
+  /* ---------- 8. CONNECT SAFE RIDE ---------- */
+
+  connectFeature(
+    "Get a safe ride",
+    safeRide
+  );
+
+  connectFeature(
+    "Oops! How do I go home?",
+    safeRide
+  );
+
+
+  /* ---------- 9. CART BUY BUTTON ---------- */
+
+  document.addEventListener(
+    "click",
+    function (event) {
+
+      const text =
+        event.target.textContent
+          .trim()
+          .toLowerCase();
+
+      if (
+        text.includes("view cart") ||
+        text.includes("cart")
+      ) {
+
+        setTimeout(function () {
+
+          const cartArea =
+            document.querySelector(
+              ".cart-drawer, .cart-modal, .cart-panel, .cart"
+            );
+
+          if (!cartArea) return;
+
+          if (
+            cartArea.querySelector(
+              ".drink-buy-button"
+            )
+          ) {
+            return;
+          }
+
+          const buyButton =
+            document.createElement("button");
+
+          buyButton.className =
+            "drink-buy-button";
+
+          buyButton.textContent =
+            "Buy Now";
+
+          buyButton.style.cssText = `
+            width:100%;
+            padding:14px;
+            margin-top:15px;
+            background:#ffd600;
+            color:#111;
+            border:none;
+            border-radius:12px;
+            font-size:17px;
+            font-weight:800;
+            cursor:pointer;
+          `;
+
+          buyButton.onclick =
+            function () {
+
+              alert(
+                "Order placed successfully! 🎉"
+              );
+
+            };
+
+          cartArea.appendChild(
+            buyButton
+          );
+
+        }, 300);
+      }
+
+    }
+  );
+
+
+  /* ---------- 10. SAVE ADDRESS ---------- */
+
+  window.saveDrinkAddress =
+    function () {
+
+      const address =
+        prompt(
+          "Enter your delivery address:"
+        );
+
+      if (!address || !address.trim()) {
+        alert("Please enter an address.");
+        return;
+      }
+
+      localStorage.setItem(
+        "drinkit_saved_address",
+        address.trim()
+      );
+
+      alert(
+        "Address saved successfully! 📍"
+      );
+    };
+
+
+  /* ---------- 11. LOAD SAVED ADDRESS ---------- */
+
+  window.getDrinkAddress =
+    function () {
+
+      return localStorage.getItem(
+        "drinkit_saved_address"
+      ) || "";
+    };
+
+
+  console.log(
+    "Drink It features connected successfully."
+  );
+
+})();
   
 </script>
   <!-- ===== DRINK IT LOGIN MODAL ===== -->
