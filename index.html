@@ -1532,7 +1532,556 @@ document.addEventListener(
 
 updateDrinkLoginUI();
 
+/* ================= DRINK IT EXTRA FEATURES ================= */
 
+/* 1. AUTO OPEN LOGIN AFTER AGE CONFIRMATION */
+
+const oldConfirmAge = confirmAge;
+
+confirmAge = function () {
+  oldConfirmAge();
+
+  setTimeout(function () {
+    if (typeof openDrinkLogin === "function") {
+      openDrinkLogin();
+    }
+  }, 400);
+};
+
+
+/* 2. USER NAME TOP RIGHT */
+
+function showDrinkUserName() {
+
+  const user = JSON.parse(
+    localStorage.getItem("drinkit_user")
+  );
+
+  if (!user) return;
+
+  let box = document.getElementById("drinkUserName");
+
+  if (!box) {
+
+    box = document.createElement("span");
+
+    box.id = "drinkUserName";
+
+    box.style.cssText = `
+      background:#111;
+      color:#ffd600;
+      padding:8px 12px;
+      border-radius:20px;
+      font-weight:700;
+      font-size:13px;
+      margin-right:8px;
+    `;
+
+    const headerActions =
+      document.querySelector(".header-actions");
+
+    if (headerActions) {
+      headerActions.prepend(box);
+    }
+  }
+
+  box.textContent = "👤 " + user.name;
+}
+
+
+/* 3. LOGIN */
+
+function openDrinkLogin() {
+
+  if (document.getElementById("drinkLoginBox")) return;
+
+  const box = document.createElement("div");
+
+  box.id = "drinkLoginBox";
+
+  box.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  `;
+
+  box.innerHTML = `
+    <div style="
+      background:white;
+      padding:25px;
+      border-radius:20px;
+      width:100%;
+      max-width:400px;
+    ">
+
+      <h2>Welcome Back 👋</h2>
+
+      <input
+        id="drinkLoginEmail"
+        type="email"
+        placeholder="Email Address"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:15px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        "
+      >
+
+      <input
+        id="drinkLoginPassword"
+        type="password"
+        placeholder="Password"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:10px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        "
+      >
+
+      <button
+        onclick="drinkLogin()"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:15px;
+          background:#ffd600;
+          border:0;
+          border-radius:10px;
+          font-weight:bold;
+        "
+      >
+        Login
+      </button>
+
+      <button
+        onclick="drinkSignup()"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:10px;
+          background:#111;
+          color:white;
+          border:0;
+          border-radius:10px;
+        "
+      >
+        Create Account
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(box);
+}
+
+
+/* 4. SIGN UP */
+
+function drinkSignup() {
+
+  const box =
+    document.getElementById("drinkLoginBox");
+
+  if (box) box.remove();
+
+  const signup = document.createElement("div");
+
+  signup.id = "drinkSignupBox";
+
+  signup.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  `;
+
+  signup.innerHTML = `
+    <div style="
+      background:white;
+      padding:25px;
+      border-radius:20px;
+      width:100%;
+      max-width:400px;
+    ">
+
+      <h2>Create Account 🍷</h2>
+
+      <input
+        id="drinkName"
+        placeholder="Full Name"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:15px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        "
+      >
+
+      <input
+        id="drinkEmail"
+        type="email"
+        placeholder="Email Address"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:10px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        "
+      >
+
+      <input
+        id="drinkPassword"
+        type="password"
+        placeholder="Create Password"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:10px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        "
+      >
+
+      <input
+        id="drinkAge"
+        type="number"
+        placeholder="Age"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:10px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        "
+      >
+
+      <button
+        onclick="createDrinkAccount()"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:15px;
+          background:#ffd600;
+          border:0;
+          border-radius:10px;
+          font-weight:bold;
+        "
+      >
+        Sign Up
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(signup);
+}
+
+
+function createDrinkAccount() {
+
+  const name =
+    document.getElementById("drinkName").value.trim();
+
+  const email =
+    document.getElementById("drinkEmail").value.trim();
+
+  const password =
+    document.getElementById("drinkPassword").value;
+
+  const age =
+    Number(
+      document.getElementById("drinkAge").value
+    );
+
+  if (!name || !email || !password || !age) {
+
+    alert("Please fill all details.");
+    return;
+
+  }
+
+  if (age < 18) {
+
+    alert(
+      "You must meet the applicable legal drinking age."
+    );
+
+    return;
+  }
+
+  localStorage.setItem(
+    "drinkit_user",
+    JSON.stringify({
+      name:name,
+      email:email,
+      password:password
+    })
+  );
+
+  localStorage.setItem(
+    "drinkit_logged",
+    "yes"
+  );
+
+  const signup =
+    document.getElementById("drinkSignupBox");
+
+  if (signup) signup.remove();
+
+  showDrinkUserName();
+
+  alert("Account created successfully!");
+}
+
+
+/* 5. LOGIN CHECK */
+
+function drinkLogin() {
+
+  const email =
+    document
+      .getElementById("drinkLoginEmail")
+      .value.trim();
+
+  const password =
+    document
+      .getElementById("drinkLoginPassword")
+      .value;
+
+  const user =
+    JSON.parse(
+      localStorage.getItem("drinkit_user")
+    );
+
+  if (
+    user &&
+    user.email === email &&
+    user.password === password
+  ) {
+
+    localStorage.setItem(
+      "drinkit_logged",
+      "yes"
+    );
+
+    document
+      .getElementById("drinkLoginBox")
+      ?.remove();
+
+    showDrinkUserName();
+
+    alert("Login successful!");
+
+  } else {
+
+    alert(
+      "Account not found. Please Sign Up first."
+    );
+
+  }
+}
+
+
+/* 6. WINE + WHISKY PRODUCTS */
+
+if (typeof catalog !== "undefined") {
+
+  catalog.popular.push(
+
+    {
+      brand:"Sula Vineyards",
+      name:"Sula Red Wine",
+      size:"750ml",
+      price:950,
+      mrp:1100,
+      icon:wineBottleSVG,
+      badge:"",
+      delivery:""
+    },
+
+    {
+      brand:"Fratelli",
+      name:"Fratelli Red Wine",
+      size:"750ml",
+      price:1100,
+      mrp:1300,
+      icon:wineBottleSVG,
+      badge:"",
+      delivery:""
+    },
+
+    {
+      brand:"Royal Stag",
+      name:"Royal Stag Whisky",
+      size:"750ml",
+      price:850,
+      mrp:1000,
+      icon:whiskyBottleSVG,
+      badge:"",
+      delivery:""
+    },
+
+    {
+      brand:"Blenders Pride",
+      name:"Blenders Pride Whisky",
+      size:"750ml",
+      price:1050,
+      mrp:1250,
+      icon:whiskyBottleSVG,
+      badge:"",
+      delivery:""
+    }
+
+  );
+
+}
+
+
+/* 7. YELLOW / BLINKIT STYLE */
+
+const drinkStyle =
+document.createElement("style");
+
+drinkStyle.innerHTML = `
+
+body {
+  background:#fffdf0 !important;
+}
+
+header {
+  background:#ffd600 !important;
+}
+
+.hero {
+  background:#ffd600 !important;
+  color:#111 !important;
+}
+
+.btn-primary,
+.btn-add {
+  background:#ffd600 !important;
+  color:#111 !important;
+}
+
+.card {
+  background:#fff !important;
+}
+
+.delivery-chip {
+  display:none !important;
+}
+
+`;
+
+document.head.appendChild(drinkStyle);
+
+
+/* 8. LEVER POINT */
+
+function openDrinkLeverPoint() {
+
+  const bottles =
+    prompt(
+      "How many bottles do you want to return?"
+    );
+
+  if (!bottles) return;
+
+  const total =
+    Number(bottles) * 5;
+
+  alert(
+    "You will receive ₹" +
+    total +
+    " (₹5 per bottle)."
+  );
+}
+
+
+/* 9. PARTY BUDDY */
+
+function openDrinkPartyBuddy() {
+
+  let people =
+    Number(
+      prompt(
+        "How many people are required? Maximum 2."
+      )
+    );
+
+  if (people < 1 || people > 2) {
+
+    alert(
+      "Maximum 2 people are allowed."
+    );
+
+    return;
+  }
+
+  alert(
+    people +
+    " person(s) × ₹300 = ₹" +
+    (people * 300)
+  );
+}
+
+
+/* 10. CAR / SAFE RIDE */
+
+function openDrinkCar() {
+
+  const km =
+    Number(
+      prompt(
+        "Enter distance in kilometres:"
+      )
+    );
+
+  if (km < 1) return;
+
+  alert(
+    "Car charge = ₹" +
+    (km * 100) +
+    " (₹100 per kilometre)"
+  );
+}
+
+
+/* 11. SAVED ADDRESS */
+
+function saveDrinkAddress(address) {
+
+  localStorage.setItem(
+    "drinkit_address",
+    address
+  );
+
+  alert("Address saved successfully!");
+}
+
+
+/* 12. LOAD USER */
+
+if (
+  localStorage.getItem("drinkit_logged") === "yes"
+) {
+  showDrinkUserName();
+}
 
 
   
