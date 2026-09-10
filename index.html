@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 /* ============ TOKENS ============ */
 :root{
   --void:#14100F;
@@ -103,6 +104,11 @@ header{
 }
 .icon-btn svg{width:18px; height:18px; stroke:var(--cream); fill:none;}
 .header-actions{display:flex; align-items:center; gap:8px;}
+.user-chip{
+  display:flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--stroke);
+  color:var(--gold-soft); padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:600;
+  font-family:var(--font-mono);
+}
 .cart-dot{
   position:absolute; top:-4px; right:-4px; background:var(--wine-bright); color:var(--cream);
   font-family:var(--font-mono); font-size:10px; font-weight:600; min-width:16px; height:16px; border-radius:50%;
@@ -125,20 +131,34 @@ header{
 
 /* ============ LOCATION MODAL ============ */
 #location-modal{position:fixed; inset:0; background:rgba(10,8,7,0.85); z-index:150; display:flex; align-items:flex-end; justify-content:center;}
-.loc-sheet{background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-width:480px; padding:24px 22px 28px; border:1px solid var(--stroke); border-bottom:none;}
+.loc-sheet{background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-width:480px; padding:24px 22px 28px; border:1px solid var(--stroke); border-bottom:none; position:relative;}
 .loc-sheet h3{font-family:var(--font-display); font-size:19px; margin-bottom:16px;}
 .loc-sheet input{
   width:100%; background:var(--surface-2); border:1px solid var(--stroke); color:var(--cream); border-radius:var(--radius-sm);
   padding:11px 13px; font-size:13.5px; margin-bottom:10px; font-family:var(--font-body);
 }
+.loc-sheet input:focus{border-color:var(--gold);}
+.loc-sheet input.field-error{border-color:var(--wine-bright);}
 .loc-row2{display:flex; gap:10px;}
 .loc-row2 input{flex:1;}
 .use-current{
   display:flex; align-items:center; gap:8px; color:var(--gold); font-size:13px; font-weight:600; margin:12px 0 16px;
+  background:none; padding:0; width:auto;
 }
 .use-current svg{width:15px; height:15px; stroke:var(--gold); fill:none;}
 .loc-save{width:100%; background:var(--gold); color:#241A0C; padding:13px; border-radius:999px; font-weight:700; font-size:14px;}
-.loc-close{position:absolute; margin-top:-8px;}
+.loc-close{position:absolute; right:22px; top:20px; background:none; color:var(--muted); font-size:20px; width:28px; height:28px; border-radius:50%;}
+.loc-message{
+  display:none; padding:9px 12px; border-radius:8px; margin-bottom:12px; font-size:12.5px;
+}
+.loc-message.show{display:block;}
+.loc-message.error{background:rgba(179,42,77,0.12); color:var(--wine-bright);}
+.loc-message.success{background:rgba(95,166,113,0.12); color:var(--good);}
+.saved-address-note{
+  font-size:12px; color:var(--muted); margin-bottom:14px; padding:10px 12px; background:var(--surface-2);
+  border:1px solid var(--stroke); border-radius:var(--radius-sm); display:none;
+}
+.saved-address-note.show{display:block;}
 
 /* ============ HERO BANNER ============ */
 .hero{
@@ -167,6 +187,16 @@ header{
 }
 .hero-badge .dot{width:6px; height:6px; border-radius:50%; background:var(--good); animation:blink 1.6s ease infinite;}
 @keyframes blink{50%{opacity:0.3;}}
+.hero-stats{display:flex; gap:28px; margin-top:26px; flex-wrap:wrap;}
+.hero-stat .num{font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--gold-soft);}
+.hero-stat .label{font-size:11px; color:var(--muted); margin-top:2px;}
+
+/* ============ HOW IT WORKS ============ */
+.steps{display:grid; grid-template-columns:1fr; gap:24px;}
+@media(min-width:720px){.steps{grid-template-columns:repeat(3,1fr);}}
+.step-num{font-family:var(--font-display); font-size:32px; font-weight:600; color:var(--stroke); line-height:1; margin-bottom:10px;}
+.step h4{font-size:15px; font-weight:700; margin-bottom:6px;}
+.step p{color:var(--muted); font-size:13px; line-height:1.6;}
 
 /* ============ CATEGORIES ============ */
 .cat-scroll{
@@ -255,7 +285,7 @@ header{
 }
 .brand-card .b-mark{width:26px; height:26px; border-radius:50%; border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--gold);}
 
-/* ============ FEATURE BLOCKS (Lever Point / Party Buddy / Safe Ride) ============ */
+/* ============ FEATURE BLOCKS ============ */
 .feature-block{
   display:grid; grid-template-columns:1fr; gap:20px; align-items:center;
   background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius); padding:26px; margin-bottom:16px;
@@ -273,7 +303,7 @@ header{
   min-height:150px; display:flex; align-items:center; justify-content:center;
 }
 .feature-visual svg{width:80px; height:80px;}
-.chip-link{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--gold);}
+.chip-link{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--gold); background:none;}
 .chip-link svg{width:14px; height:14px; stroke:var(--gold); fill:none;}
 
 /* ============ WHY CHOOSE US ============ */
@@ -348,160 +378,77 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
   #sticky-cart{bottom:24px;}
   body{padding-bottom:0;}
 }
-  /* ===== DRINK IT AUTH SYSTEM ===== */
 
+/* ===== AUTH MODAL (single, consistent, on-theme) ===== */
 .auth-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(10,8,7,0.82);
+  backdrop-filter: blur(4px);
   display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  z-index: 99999;
+  z-index: 250;
 }
-
-.auth-modal.active {
-  display: flex;
-}
-
+.auth-modal.active { display: flex; }
 .auth-card {
   width: 100%;
   max-width: 420px;
-  background: #fff;
-  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
   padding: 30px;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
-
 .auth-card h2 {
+  font-family: var(--font-display);
   margin: 0 0 8px;
-  font-size: 30px;
-  color: #111;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--cream);
 }
-
-.auth-card .auth-subtitle {
-  color: #777;
-  margin-bottom: 22px;
-}
-
+.auth-card .auth-subtitle { color: var(--muted); margin-bottom: 22px; font-size: 13.5px; }
 .auth-close {
-  position: absolute;
-  right: 18px;
-  top: 12px;
-  border: none;
-  background: transparent;
-  font-size: 30px;
-  cursor: pointer;
-  color: #555;
+  position: absolute; right: 16px; top: 14px; border: none; background: transparent;
+  font-size: 26px; cursor: pointer; color: var(--muted); line-height:1; width:28px; height:28px; border-radius:50%;
 }
-
-.auth-field {
-  margin-bottom: 15px;
-}
-
-.auth-field label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 6px;
-  color: #222;
-}
-
+.auth-close:hover{color:var(--cream);}
+.auth-field { margin-bottom: 15px; }
+.auth-field label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--cream); font-size:13px; }
 .auth-field input {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 15px;
-  outline: none;
+  width: 100%; padding: 12px 13px; border: 1px solid var(--stroke); border-radius: var(--radius-sm);
+  font-size: 14px; outline: none; background: var(--surface-2); color: var(--cream); font-family: var(--font-body);
 }
-
-.auth-field input:focus {
-  border-color: #e63946;
-}
-
+.auth-field input::placeholder{color:var(--muted-2);}
+.auth-field input:focus { border-color: var(--gold); }
 .auth-submit-btn {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background: #e63946;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 5px;
+  width: 100%; padding: 13px; border: none; border-radius: 999px; background: var(--gold);
+  color: #241A0C; font-size: 14.5px; font-weight: 700; cursor: pointer; margin-top: 5px;
 }
-
-.auth-submit-btn:hover {
-  background: #c92f3b;
-}
-
-.auth-switch {
-  text-align: center;
-  margin-top: 18px;
-  font-size: 14px;
-  color: #555;
-}
-
-.auth-switch button {
-  border: none;
-  background: none;
-  color: #e63946;
-  font-weight: bold;
-  cursor: pointer;
-}
-
+.auth-submit-btn:hover { background: var(--gold-soft); }
+.auth-switch { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+.auth-switch button { border: none; background: none; color: var(--gold); font-weight: 700; cursor: pointer; }
 .auth-forgot {
-  display: block;
-  margin-left: auto;
-  margin-top: 5px;
-  border: none;
-  background: none;
-  color: #e63946;
-  cursor: pointer;
-  font-size: 13px;
+  display: block; margin-left: auto; margin-top: 6px; border: none; background: none;
+  color: var(--gold); cursor: pointer; font-size: 12.5px;
 }
+.auth-message { display: none; padding: 10px 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; }
+.auth-message.show { display: block; }
+.auth-message.error { background: rgba(179,42,77,0.12); color: var(--wine-bright); }
+.auth-message.success { background: rgba(95,166,113,0.12); color: var(--good); }
+.age-confirm { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--muted); margin: 15px 0; line-height:1.5; }
+.age-confirm input { margin-top: 3px; accent-color: var(--gold); }
 
-.auth-message {
-  display: none;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  font-size: 14px;
-}
-
-.auth-message.show {
-  display: block;
-}
-
-.auth-message.error {
-  background: #ffe5e5;
-  color: #b00020;
-}
-
-.auth-message.success {
-  background: #e5ffe9;
-  color: #08752a;
-}
-
-.age-confirm {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  font-size: 13px;
-  color: #555;
-  margin: 15px 0;
-}
-
-.age-confirm input {
-  margin-top: 3px;
-}
+/* ============ SINGLE-PAGE NAVIGATION ============ */
+#app-page { display:none; }
+#app-page.visible { display:block; }
+#landing-host { display:block; }
+#landing-host.hidden { display:none !important; }
 </style>
 </head>
 <body>
-
 <!-- ============ AGE GATE ============ -->
 <div id="age-gate">
   <div class="age-card">
@@ -518,20 +465,412 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
   </div>
 </div>
 
+<!-- ============ LANDING PAGE ============ -->
+<div id="landing-host"></div>
+<template id="landing-template">
+<style>
+
+:root{
+  --void:#14100F;
+  --surface:#1E1815;
+  --surface-2:#241D19;
+  --stroke:#332924;
+  --wine:#8C1F3B;
+  --wine-bright:#B32A4D;
+  --gold:#C9A15A;
+  --gold-soft:#E4C98A;
+  --cream:#F3ECE1;
+  --muted:#9C9086;
+  --muted-2:#6E645C;
+  --good:#5FA671;
+  --radius:18px;
+  --radius-sm:10px;
+  --font-display:'Fraunces', serif;
+  --font-body:'Sora', sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--void);
+  color:var(--cream);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%; display:block;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer; border:none;}
+::selection{background:var(--wine); color:var(--cream);}
+:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+.wrap{max-width:1080px; margin:0 auto; padding:0 20px;}
+.eyebrow{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); display:flex; align-items:center; gap:8px; margin-bottom:12px;
+}
+.eyebrow::before{content:''; width:14px; height:1px; background:var(--gold);}
+section{padding:60px 0;}
+
+/* ============ AGE GATE ============ */
+#age-gate{
+  position:fixed; inset:0; background:rgba(10,8,7,0.92); backdrop-filter:blur(6px);
+  z-index:200; display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.age-card{
+  background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius);
+  max-width:380px; width:100%; padding:32px 28px; text-align:center;
+}
+.age-bottle{width:34px; height:34px; margin:0 auto 18px;}
+.age-card h1{font-family:var(--font-display); font-size:22px; font-weight:600; margin-bottom:10px;}
+.age-card p{color:var(--muted); font-size:14px; line-height:1.5; margin-bottom:22px;}
+.age-buttons{display:flex; gap:10px;}
+.age-buttons button{flex:1; padding:13px; border-radius:999px; font-weight:600; font-size:14px;}
+.btn-confirm{background:var(--gold); color:#241A0C;}
+.btn-decline{background:transparent; border:1px solid var(--stroke); color:var(--muted);}
+.age-fine{margin-top:16px; font-size:11px; color:var(--muted-2);}
+.hidden{display:none !important;}
+
+/* ============ HEADER ============ */
+header{
+  position:sticky; top:0; z-index:50; background:rgba(20,16,15,0.9); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--stroke);
+}
+.top-bar{
+  max-width:1080px; margin:0 auto; padding:16px 20px; display:flex; align-items:center; justify-content:space-between;
+}
+.logo{display:flex; align-items:baseline; font-family:var(--font-display); font-weight:600; font-size:22px; gap:1px;}
+.logo .bottle-i{display:inline-block; width:14px; height:22px; position:relative; top:2px;}
+.logo .bottle-i svg{width:100%; height:100%;}
+.nav-links{display:none; align-items:center; gap:28px; font-size:13.5px; color:var(--muted); font-weight:500;}
+.nav-links a:hover{color:var(--cream);}
+@media(min-width:760px){.nav-links{display:flex;}}
+.header-cta{background:var(--gold); color:#241A0C; padding:10px 20px; border-radius:999px; font-weight:700; font-size:13.5px;}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;
+  background:
+    radial-gradient(120% 140% at 15% 0%, rgba(140,31,59,0.55), transparent 55%),
+    radial-gradient(100% 120% at 100% 100%, rgba(201,161,90,0.25), transparent 60%),
+    linear-gradient(160deg, #241A17, #14100F 70%);
+  padding:70px 20px 80px;
+  text-align:center;
+  border-bottom:1px solid var(--stroke);
+}
+.hero-badge{
+  display:inline-flex; align-items:center; gap:6px; background:rgba(20,16,15,0.6); border:1px solid var(--stroke);
+  border-radius:999px; padding:7px 14px; font-family:var(--font-mono); font-size:11px; color:var(--gold-soft); margin-bottom:22px;
+}
+.hero-badge .dot{width:6px; height:6px; border-radius:50%; background:var(--good); animation:blink 1.6s ease infinite;}
+@keyframes blink{50%{opacity:0.3;}}
+.hero h1{
+  font-family:var(--font-display); font-weight:600; font-size:clamp(32px,7vw,58px); line-height:1.06;
+  letter-spacing:-0.01em; max-width:720px; margin:0 auto;
+}
+.hero h1 em{font-style:italic; color:var(--gold-soft);}
+.hero p{color:var(--muted); font-size:16px; line-height:1.6; max-width:480px; margin:20px auto 32px;}
+.hero-cta{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
+.btn-primary{background:var(--gold); color:#241A0C; padding:15px 30px; border-radius:999px; font-weight:700; font-size:15px;}
+.btn-ghost{background:transparent; border:1px solid var(--stroke); color:var(--cream); padding:15px 28px; border-radius:999px; font-weight:600; font-size:15px;}
+.hero-stats{
+  display:flex; justify-content:center; gap:40px; margin-top:56px; flex-wrap:wrap;
+}
+.hero-stat{text-align:center;}
+.hero-stat .num{font-family:var(--font-display); font-size:30px; font-weight:600; color:var(--gold-soft);}
+.hero-stat .label{font-size:12px; color:var(--muted); margin-top:4px;}
+
+/* ============ CATEGORY STRIP ============ */
+.cat-strip{
+  display:flex; gap:14px; overflow-x:auto; padding:4px 20px; scrollbar-width:none; justify-content:center; flex-wrap:wrap;
+}
+.cat-strip::-webkit-scrollbar{display:none;}
+.cat-chip{
+  flex:0 0 auto; display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--stroke);
+  border-radius:999px; padding:10px 16px; font-size:13px; color:var(--muted); font-weight:600;
+}
+.cat-chip .ic{font-size:16px;}
+
+/* ============ SECTION HEAD ============ */
+.section-head{text-align:center; max-width:560px; margin:0 auto 40px;}
+.section-head .eyebrow{justify-content:center;}
+.section-head h2{
+  font-family:var(--font-display); font-weight:600; font-size:clamp(24px,4vw,36px); letter-spacing:-0.01em;
+}
+.section-head p{color:var(--muted); font-size:14.5px; margin-top:12px; line-height:1.6;}
+
+/* ============ FEATURE GRID ============ */
+.feature-grid{display:grid; grid-template-columns:1fr; gap:18px;}
+@media(min-width:760px){.feature-grid{grid-template-columns:repeat(3,1fr);}}
+.feature-card{
+  background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius); padding:30px 26px;
+  transition:border-color .2s ease;
+}
+.feature-icon-wrap{
+  width:52px; height:52px; border-radius:14px; background:var(--surface-2); border:1px solid var(--stroke);
+  display:flex; align-items:center; justify-content:center; margin-bottom:18px;
+}
+.feature-icon-wrap svg{width:24px; height:24px; stroke:var(--gold); fill:none;}
+.feature-card h3{font-family:var(--font-display); font-size:19px; font-weight:600; margin-bottom:10px;}
+.feature-card p{color:var(--muted); font-size:13.5px; line-height:1.6;}
+
+/* ============ HOW IT WORKS ============ */
+.steps{display:grid; grid-template-columns:1fr; gap:0; position:relative;}
+@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr); gap:24px;}}
+.step{position:relative; padding:0 0 32px;}
+@media(min-width:760px){.step{padding:0;}}
+.step-num{
+  font-family:var(--font-display); font-size:40px; font-weight:600; color:var(--stroke); line-height:1; margin-bottom:14px;
+}
+.step h4{font-size:16px; font-weight:700; margin-bottom:8px;}
+.step p{color:var(--muted); font-size:13.5px; line-height:1.6;}
+
+/* ============ WHY GRID ============ */
+.why-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+@media(min-width:720px){.why-grid{grid-template-columns:repeat(4,1fr);}}
+.why-card{background:var(--surface); border:1px solid var(--stroke); border-radius:var(--radius-sm); padding:22px 18px;}
+.why-card svg{width:22px; height:22px; stroke:var(--gold); fill:none; margin-bottom:14px;}
+.why-card h4{font-size:14.5px; font-weight:700; margin-bottom:6px;}
+.why-card p{font-size:12px; color:var(--muted); line-height:1.5;}
+
+/* ============ CTA BAND ============ */
+.cta-band{
+  background:linear-gradient(135deg, rgba(140,31,59,0.35), rgba(20,16,15,1));
+  border:1px solid var(--stroke); border-radius:var(--radius); padding:50px 30px; text-align:center;
+}
+.cta-band h2{font-family:var(--font-display); font-size:clamp(24px,4vw,34px); font-weight:600; margin-bottom:14px;}
+.cta-band p{color:var(--muted); font-size:14.5px; margin-bottom:26px; max-width:460px; margin-left:auto; margin-right:auto;}
+
+/* ============ RESPONSIBLE MESSAGE ============ */
+.responsible{
+  border:1px solid rgba(201,161,90,0.35); background:rgba(201,161,90,0.06);
+  border-radius:var(--radius); padding:24px 26px; display:flex; gap:14px; align-items:flex-start;
+}
+.responsible svg{width:22px; height:22px; stroke:var(--gold); fill:none; flex-shrink:0; margin-top:2px;}
+.responsible h4{font-size:14.5px; font-weight:700; margin-bottom:4px;}
+.responsible p{font-size:12.5px; color:var(--muted); line-height:1.6;}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--stroke); padding:40px 0 24px; background:var(--surface);}
+.foot-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:26px; margin-bottom:28px;}
+@media(min-width:720px){.foot-grid{grid-template-columns:2fr repeat(3,1fr);}}
+.foot-logo{font-family:var(--font-display); font-weight:600; font-size:20px; margin-bottom:10px; display:flex; align-items:baseline;}
+.foot-logo .bottle-i{width:13px; height:21px; display:inline-block; position:relative; top:2px;}
+.foot-tag{color:var(--muted); font-size:12.5px; line-height:1.6; max-width:260px;}
+.foot-col h5{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin-bottom:12px;}
+.foot-col a{display:block; color:var(--muted); font-size:13px; margin-bottom:9px;}
+.foot-bottom{display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; padding-top:20px; border-top:1px solid var(--stroke); font-size:11.5px; color:var(--muted-2);}
+
+</style>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="top-bar">
+    <div class="logo">DRINK<span class="bottle-i"><svg viewBox="0 0 24 40" fill="none"><path d="M9 1h6v6l2.5 3.5V37a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V10.5L9 7V1z" stroke="#C9A15A" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#C9A15A" stroke-width="1.3"/></svg></span>T</div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#why">Why us</a>
+    </nav>
+    <a href="#" data-open-app class="header-cta">Order Now</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <span class="hero-badge"><span class="dot"></span> Now live in Indranagar</span>
+    <h1>Whatever the party<br>needs, <em>in minutes.</em></h1>
+    <p>Spirits, mixers, ice, snacks and everything in between — from shops near you, at the door before the playlist ends.</p>
+    <div class="hero-cta">
+      <a href="#" data-open-app class="btn-primary">Order Now</a>
+      <a href="#how" class="btn-ghost">See how it works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">10 min</div><div class="label">Avg. delivery</div></div>
+      <div class="hero-stat"><div class="num">500+</div><div class="label">Products</div></div>
+      <div class="hero-stat"><div class="num">24/7</div><div class="label">Safe Ride</div></div>
+    </div>
+  </div>
+
+  <!-- ============ CATEGORY STRIP ============ -->
+  <section style="padding-top:36px; padding-bottom:36px;">
+    <div class="cat-strip">
+      <div class="cat-chip"><span class="ic">🍾</span> Spirits & Wine</div>
+      <div class="cat-chip"><span class="ic">🍺</span> Beer</div>
+      <div class="cat-chip"><span class="ic">🧊</span> Ice</div>
+      <div class="cat-chip"><span class="ic">🥤</span> Mixers</div>
+      <div class="cat-chip"><span class="ic">🍿</span> Snacks</div>
+      <div class="cat-chip"><span class="ic">⚡</span> ORS & Hydration</div>
+      <div class="cat-chip"><span class="ic">🎉</span> Party Kit</div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">What makes us different</div>
+        <h2>Built for the whole night</h2>
+        <p>Not just a delivery app — a few things that make party nights safer and easier.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M4 4l3 3M20 4l-3 3M12 2v4"/><path d="M7 8h10l1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L7 8z"/><path d="M9 13l3 3 3-3"/></svg></div>
+          <h3>Lever Point</h3>
+          <p>Hand back your empty bottles when your next order arrives and earn Lever Points — credited straight to your wallet.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg></div>
+          <h3>Safe Ride</h3>
+          <p>Had one too many? Tap once for a verified ride home. No fumbling with three different apps at 1am.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 21c-4-3-8-6.4-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 4.6-4 8-8 11z"/></svg></div>
+          <h3>Party Buddy</h3>
+          <p>Tell us the vibe, headcount and budget — we build a cart of drinks, mixers and snacks so you don't have to think about it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how" style="background:var(--surface); border-top:1px solid var(--stroke); border-bottom:1px solid var(--stroke);">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Simple by design</div>
+        <h2>Three taps to doorstep</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4>Set your address</h4>
+          <p>Drop your delivery location so we can show you what's available near you right now.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4>Pick what you need</h4>
+          <p>Drinks, mixers, ice, snacks — or let Party Buddy build the cart for you in seconds.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4>It's at your door</h4>
+          <p>From shops near you, checked and delivered — usually inside 10–12 minutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY CHOOSE US ============ -->
+  <section id="why">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">The short version</div>
+        <h2>Why choose Drink It</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>
+          <h4>Fast delivery</h4>
+          <p>From local shops near your address, not a warehouse three towns away.</p>
+        </div>
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7z"/></svg>
+          <h4>ID checked, every time</h4>
+          <p>Every delivery is age-verified at the door. No exceptions.</p>
+        </div>
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M20 7l-9 9-4-4"/><path d="M3 12a9 9 0 1 0 3-6.7"/></svg>
+          <h4>Clear pricing</h4>
+          <p>What you see is what you pay — no surprise charges at checkout.</p>
+        </div>
+        <div class="why-card">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/></svg>
+          <h4>Safe ride, always on</h4>
+          <p>One tap for a verified ride home whenever you need it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA BAND ============ -->
+  <section id="get-app">
+    <div class="wrap">
+      <div class="cta-band">
+        <h2>Ready when you are.</h2>
+        <p>Set your delivery address and see what's available near you tonight.</p>
+        <a href="#" data-open-app class="btn-primary">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESPONSIBLE MESSAGE ============ -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="responsible">
+        <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+        <div>
+          <h4>Drink responsibly</h4>
+          <p>Drink It only delivers to and serves customers of legal drinking age. Please pace yourself, eat something, stay hydrated, and use Safe Ride if you've had more than you planned.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">DRINK<span class="bottle-i"><svg viewBox="0 0 24 40" fill="none"><path d="M9 1h6v6l2.5 3.5V37a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V10.5L9 7V1z" stroke="#C9A15A" stroke-width="1.6"/></svg></span>T</div>
+        <p class="foot-tag">Your party. Your vibe. Everything you need, delivered from shops near you.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Shop</h5>
+        <a href="#">Drinks</a><a href="#">Party Essentials</a><a href="#">Combos</a><a href="#">Snacks</a>
+      </div>
+      <div class="foot-col">
+        <h5>Drink It</h5>
+        <a href="#">Lever Point</a><a href="#">Party Buddy</a><a href="#">Safe Ride</a><a href="#">Help</a>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <a href="#">Age Policy</a><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Licenses</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Drink It. Please drink responsibly.</span>
+      <span>Alcohol delivered only to verified addresses, to customers of legal drinking age.</span>
+    </div>
+  </div>
+</footer>
+
+
+</template>
+
+<!-- ============ MAIN DRINK IT APP ============ -->
+<div id="app-page">
+
 <!-- ============ LOCATION MODAL ============ -->
 <div id="location-modal" class="hidden">
   <div class="loc-sheet">
+    <button class="loc-close" onclick="document.getElementById('location-modal').classList.add('hidden')">×</button>
     <h3>Where should we deliver?</h3>
-    <input type="text" placeholder="House / Flat No.">
-    <input type="text" placeholder="Area / Street">
+    <div id="loc-message" class="loc-message"></div>
+    <div id="saved-address-note" class="saved-address-note"></div>
+    <input type="text" id="addr-house" placeholder="House / Flat No.">
+    <input type="text" id="addr-street" placeholder="Area / Street">
     <div class="loc-row2">
-      <input type="text" placeholder="City">
-      <input type="text" placeholder="PIN Code">
+      <input type="text" id="addr-city" placeholder="City">
+      <input type="text" id="addr-pin" placeholder="PIN Code">
     </div>
-    <div class="use-current">
+    <button type="button" class="use-current" onclick="useCurrentLocation()">
       <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
       Use current location
-    </div>
+    </button>
     <button class="loc-save" onclick="saveLocation()">Save address</button>
   </div>
 </div>
@@ -540,18 +879,16 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
 <header>
   <div class="top-bar">
     <div class="logo">DRINK<span class="bottle-i"><svg viewBox="0 0 24 40" fill="none"><path d="M9 1h6v6l2.5 3.5V37a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V10.5L9 7V1z" stroke="#C9A15A" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#C9A15A" stroke-width="1.3"/></svg></span>T</div>
-    <div class="header-actions">
-<button
-  class="icon-btn"
-  aria-label="Account"
-  onclick="openDrinkLogin()">
-  
-  <svg viewBox="0 0 24 24" stroke-width="1.6">
-    <circle cx="12" cy="8" r="3.4"/>
-    <path d="M4.5 20c1.5-4 4.2-6 7.5-6s6 2 7.5 6"/>
-  </svg>
-
-</button>
+    <div class="header-actions" id="header-actions">
+      <button class="icon-btn drink-login-button" aria-label="Account" onclick="openDrinkLogin()">
+        <svg viewBox="0 0 24 24" stroke-width="1.6">
+          <circle cx="12" cy="8" r="3.4"/>
+          <path d="M4.5 20c1.5-4 4.2-6 7.5-6s6 2 7.5 6"/>
+        </svg>
+      </button>
+      <button class="icon-btn drink-logout-button" style="display:none;" aria-label="Logout" onclick="drinkLogout()">
+        <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+      </button>
       <button class="icon-btn" aria-label="Cart" onclick="scrollToCart()">
         <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="21" r="1.3"/><circle cx="17" cy="21" r="1.3"/></svg>
         <span class="cart-dot" id="header-cart-count">0</span>
@@ -560,7 +897,7 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
   </div>
   <div class="location-row" onclick="document.getElementById('location-modal').classList.remove('hidden')">
     <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-    <span class="loc-text">Delivering to Indranagar <span>· 10 min</span></span>
+    <span class="loc-text" id="header-location-text">Delivering to Indranagar <span>· 10 min</span></span>
     <svg class="chevron" viewBox="0 0 24 24" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
   </div>
   <div class="search-bar">
@@ -579,7 +916,12 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
     <p>Spirits, mixers, ice, snacks and everything in between — from shops near you, at the door before the playlist ends.</p>
     <div class="hero-cta">
       <a href="#popular" class="btn-primary">Order Now</a>
-      <a href="#brands" class="btn-ghost">Shop by Brand</a>
+      <a href="#how-it-works" class="btn-ghost">See how it works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">10 min</div><div class="label">Avg. delivery</div></div>
+      <div class="hero-stat"><div class="num">500+</div><div class="label">Products</div></div>
+      <div class="hero-stat"><div class="num">24/7</div><div class="label">Safe Ride</div></div>
     </div>
   </div>
 
@@ -603,6 +945,31 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
       <div class="cat-item"><div class="cat-circle">🍟</div><span>Chips</span></div>
       <div class="cat-item"><div class="cat-circle">🚬</div><span>Cigarettes</span></div>
       <div class="cat-item"><div class="cat-circle">🎉</div><span>Party Kit</span></div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how-it-works" style="background:var(--surface); border-top:1px solid var(--stroke); border-bottom:1px solid var(--stroke);">
+    <div class="wrap">
+      <div class="eyebrow">Simple by design</div>
+      <h2 class="section-title" style="margin-bottom:26px;">Three taps to doorstep</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4>Set your address</h4>
+          <p>Drop your delivery location so we can show you what's available near you right now.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4>Pick what you need</h4>
+          <p>Drinks, mixers, ice, snacks — or let Party Buddy build the cart for you in seconds.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4>It's at your door</h4>
+          <p>From shops near you, checked and delivered — usually inside 10–12 minutes.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -717,7 +1084,7 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
     </div>
   </section>
 
-  <!-- ============ LEVER POINT (Bottle Recycling) ============ -->
+  <!-- ============ LEVER POINT ============ -->
   <section>
     <div class="wrap">
       <div class="feature-block">
@@ -725,7 +1092,9 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
           <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M4 4l3 3M20 4l-3 3M12 2v4"/><path d="M7 8h10l1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L7 8z"/><path d="M9 13l3 3 3-3"/></svg></div>
           <h3>Lever Point</h3>
           <p>Hand back your empty bottles when your next order arrives and earn Lever Points — credited straight to your Drink It wallet.</p>
-          <a class="chip-link" href="#">How it works <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <button type="button" class="chip-link" onclick="leverPoint()">How it works
+            <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
         </div>
         <div class="feature-visual">
           <svg viewBox="0 0 100 100" fill="none"><path d="M40 8h20v18l10 14v46a6 6 0 0 1-6 6H36a6 6 0 0 1-6-6V40l10-14V8z" stroke="#C9A15A" stroke-width="2"/><path d="M28 60l8 8-8 8M72 60l-8 8 8 8" stroke="#8C1F3B" stroke-width="2"/></svg>
@@ -734,7 +1103,7 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
     </div>
   </section>
 
-  <!-- ============ SAFE RIDE (Oops! How Do I Go Home?) ============ -->
+  <!-- ============ SAFE RIDE ============ -->
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="feature-block">
@@ -742,7 +1111,9 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
           <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg></div>
           <h3>Oops! How do I go home?</h3>
           <p>Had one too many? Tap once for a verified ride home. No fumbling with three different apps at 1am — we call it for you.</p>
-          <a class="chip-link" href="#">Get a safe ride <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <button type="button" class="chip-link" onclick="safeRide()">Get a safe ride
+            <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
         </div>
         <div class="feature-visual">
           <svg viewBox="0 0 100 100" fill="none"><path d="M20 55l6-16a5 5 0 0 1 4.7-3h38.6a5 5 0 0 1 4.7 3l6 16" stroke="#C9A15A" stroke-width="2"/><rect x="14" y="55" width="72" height="20" rx="6" stroke="#C9A15A" stroke-width="2"/><circle cx="30" cy="79" r="5" stroke="#8C1F3B" stroke-width="2"/><circle cx="70" cy="79" r="5" stroke="#8C1F3B" stroke-width="2"/></svg>
@@ -759,7 +1130,9 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
           <div class="feature-icon-wrap"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 21c-4-3-8-6.4-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 4.6-4 8-8 11z"/></svg></div>
           <h3>Party Buddy</h3>
           <p>Tell us the vibe, headcount and budget — Party Buddy builds a cart of drinks, mixers and snacks so you don't have to think about it.</p>
-          <a class="chip-link" href="#">Build my cart <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <button type="button" class="chip-link" onclick="partyBuddy()">Build my cart
+            <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
         </div>
         <div class="feature-visual">
           <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="34" r="14" stroke="#C9A15A" stroke-width="2"/><path d="M22 82c2-16 12-24 28-24s26 8 28 24" stroke="#C9A15A" stroke-width="2"/><path d="M50 20v-8M38 24l-6-6M62 24l6-6" stroke="#8C1F3B" stroke-width="2"/></svg>
@@ -812,7 +1185,7 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
 </main>
 
 <!-- ============ FLOATING RIDE BUTTON ============ -->
-<div class="ride-fab" onclick="alert('Connecting you to a verified ride partner…')">
+<div class="ride-fab" onclick="safeRide()">
   <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 13l2-6a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 6"/><rect x="2" y="13" width="20" height="6" rx="2"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg>
   Need a ride?
 </div>
@@ -821,7 +1194,7 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
 <div id="sticky-cart">
   <div class="cart-pill">
     <div class="cart-info" id="cart-info">0 Items <span>₹0 total</span></div>
-    <button>View Cart
+    <button onclick="checkout()">View Cart
       <svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </button>
   </div>
@@ -848,7 +1221,7 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
     </span>
     Cart
   </a>
-  <a class="nav-item" href="#">
+  <a class="nav-item" href="#" onclick="openDrinkLogin(); return false;">
     <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c1.5-4 4.2-6 7.5-6s6 2 7.5 6"/></svg>
     Account
   </a>
@@ -868,7 +1241,10 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
       </div>
       <div class="foot-col">
         <h5>Drink It</h5>
-        <a href="#">Lever Point</a><a href="#">Party Buddy</a><a href="#">Safe Ride</a><a href="#">Help</a>
+        <a href="#" onclick="leverPoint(); return false;">Lever Point</a>
+        <a href="#" onclick="partyBuddy(); return false;">Party Buddy</a>
+        <a href="#" onclick="safeRide(); return false;">Safe Ride</a>
+        <a href="#">Help</a>
       </div>
       <div class="foot-col">
         <h5>Legal</h5>
@@ -882,30 +1258,220 @@ footer{margin-top:40px; border-top:1px solid var(--stroke); padding:36px 0 24px;
   </div>
 </footer>
 
+<!-- ===== LOGIN MODAL ===== -->
+<div class="auth-modal" id="drinkLoginModal">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeDrinkAuth()">×</button>
+    <h2>Welcome Back 👋</h2>
+    <p class="auth-subtitle">Login to your Drink It account</p>
+    <div id="loginMessage" class="auth-message"></div>
+    <form onsubmit="drinkLogin(event)">
+      <div class="auth-field">
+        <label>Email Address</label>
+        <input type="email" id="drinkLoginEmail" placeholder="Enter your email" required>
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="drinkLoginPassword" placeholder="Enter your password" required>
+        <button type="button" class="auth-forgot" onclick="drinkForgotPassword()">Forgot Password?</button>
+      </div>
+      <button class="auth-submit-btn" type="submit">Login</button>
+    </form>
+    <div class="auth-switch">
+      Don't have an account?
+      <button onclick="openDrinkSignup()">Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SIGNUP MODAL ===== -->
+<div class="auth-modal" id="drinkSignupModal">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeDrinkAuth()">×</button>
+    <h2>Create Account 🍷</h2>
+    <p class="auth-subtitle">Join Drink It today</p>
+    <div id="signupMessage" class="auth-message"></div>
+    <form onsubmit="drinkSignup(event)">
+      <div class="auth-field">
+        <label>Full Name</label>
+        <input type="text" id="drinkSignupName" placeholder="Enter your full name" required>
+      </div>
+      <div class="auth-field">
+        <label>Email Address</label>
+        <input type="email" id="drinkSignupEmail" placeholder="Enter your email" required>
+      </div>
+      <div class="auth-field">
+        <label>Age</label>
+        <input type="number" id="drinkSignupAge" min="18" max="120" placeholder="Enter your age" required>
+      </div>
+      <div class="auth-field">
+        <label>Create Password</label>
+        <input type="password" id="drinkSignupPassword" minlength="6" placeholder="Minimum 6 characters" required>
+      </div>
+      <div class="auth-field">
+        <label>Confirm Password</label>
+        <input type="password" id="drinkConfirmPassword" minlength="6" placeholder="Confirm your password" required>
+      </div>
+      <label class="age-confirm">
+        <input type="checkbox" id="drinkAgeConfirm" required>
+        <span>I confirm that I meet the applicable legal drinking age and understand that alcohol products are restricted to legally eligible customers.</span>
+      </label>
+      <button class="auth-submit-btn" type="submit">Create Account</button>
+    </form>
+    <div class="auth-switch">
+      Already have an account?
+      <button onclick="openDrinkLogin()">Login</button>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
 <script>
+
+/* ======================================================
+   DRINK IT — APP SCRIPT (cleaned up, single source of truth)
+   Storage keys used:
+     drinkit_age_ok      -> sessionStorage: age gate passed
+     drinkit_user        -> localStorage:   {name,email,age,password}
+     drinkit_logged_in   -> localStorage:   "true" / removed
+     drinkit_address     -> localStorage:   {house,street,city,pin}
+   ====================================================== */
+
 // ---------- AGE GATE ----------
 function confirmAge(){
   document.getElementById('age-gate').classList.add('hidden');
-  sessionStorage.setItem('drinkit-age-ok','1');
+  sessionStorage.setItem('drinkit_age_ok','1');
 }
 function declineAge(){
   document.querySelector('.age-card').innerHTML =
     '<h1>Come back later</h1><p style="color:var(--muted);font-size:14px;line-height:1.5;">Drink It is only for customers of legal drinking age. Thanks for understanding — see you when you\'re eligible.</p>';
 }
-if(sessionStorage.getItem('drinkit-age-ok')==='1'){
+if(sessionStorage.getItem('drinkit_age_ok')==='1'){
   document.getElementById('age-gate').classList.add('hidden');
 }
 
-// ---------- LOCATION MODAL ----------
-function saveLocation(){
-  document.getElementById('location-modal').classList.add('hidden');
+// ---------- LOCATION / ADDRESS (fixed: now actually saves) ----------
+const ADDRESS_KEY = 'drinkit_address';
+
+function getSavedAddress(){
+  try{
+    return JSON.parse(localStorage.getItem(ADDRESS_KEY) || 'null');
+  }catch(e){
+    return null;
+  }
 }
+
+function formatAddress(addr){
+  if(!addr) return '';
+  return [addr.house, addr.street, addr.city, addr.pin].filter(Boolean).join(', ');
+}
+
+function showLocMessage(text, type){
+  const el = document.getElementById('loc-message');
+  el.textContent = text;
+  el.className = 'loc-message show ' + type;
+}
+
+function clearFieldErrors(){
+  ['addr-house','addr-street','addr-city','addr-pin'].forEach(id=>{
+    document.getElementById(id).classList.remove('field-error');
+  });
+}
+
+function populateAddressForm(){
+  const addr = getSavedAddress();
+  const note = document.getElementById('saved-address-note');
+  if(addr){
+    document.getElementById('addr-house').value = addr.house || '';
+    document.getElementById('addr-street').value = addr.street || '';
+    document.getElementById('addr-city').value = addr.city || '';
+    document.getElementById('addr-pin').value = addr.pin || '';
+    note.textContent = 'Saved address: ' + formatAddress(addr);
+    note.classList.add('show');
+  } else {
+    note.classList.remove('show');
+  }
+}
+
+function saveLocation(){
+  clearFieldErrors();
+  const house = document.getElementById('addr-house').value.trim();
+  const street = document.getElementById('addr-street').value.trim();
+  const city = document.getElementById('addr-city').value.trim();
+  const pin = document.getElementById('addr-pin').value.trim();
+
+  // Validate required fields so the address can't silently fail to save
+  const missing = [];
+  if(!house) missing.push('addr-house');
+  if(!street) missing.push('addr-street');
+  if(!city) missing.push('addr-city');
+  if(!pin) missing.push('addr-pin');
+
+  if(missing.length){
+    missing.forEach(id=>document.getElementById(id).classList.add('field-error'));
+    showLocMessage('Please fill in all address fields before saving.', 'error');
+    return;
+  }
+  if(!/^\d{4,6}$/.test(pin)){
+    document.getElementById('addr-pin').classList.add('field-error');
+    showLocMessage('Please enter a valid PIN code.', 'error');
+    return;
+  }
+
+  const address = {house, street, city, pin};
+  localStorage.setItem(ADDRESS_KEY, JSON.stringify(address));
+
+  showLocMessage('Address saved!', 'success');
+  updateHeaderLocation();
+
+  setTimeout(function(){
+    document.getElementById('location-modal').classList.add('hidden');
+  }, 700);
+}
+
+function useCurrentLocation(){
+  if(!navigator.geolocation){
+    showLocMessage('Geolocation is not supported on this device.', 'error');
+    return;
+  }
+  showLocMessage('Fetching your location…', 'success');
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      // No reverse-geocoding service is wired up in this demo, so we
+      // store the coordinates and let the person fill in the readable
+      // address fields themselves.
+      const coords = pos.coords.latitude.toFixed(4) + ', ' + pos.coords.longitude.toFixed(4);
+      document.getElementById('addr-street').value = document.getElementById('addr-street').value || ('Near ' + coords);
+      showLocMessage('Location detected — please confirm the details below.', 'success');
+    },
+    function(){
+      showLocMessage('Could not access your location. Please enter the address manually.', 'error');
+    }
+  );
+}
+
+function updateHeaderLocation(){
+  const addr = getSavedAddress();
+  const el = document.getElementById('header-location-text');
+  if(addr){
+    el.innerHTML = 'Delivering to ' + (addr.city || addr.street) + ' <span>· 10 min</span>';
+  }
+}
+
 document.getElementById('location-modal').addEventListener('click', function(e){
   if(e.target === this) this.classList.add('hidden');
 });
 
-// ---------- ORIGINAL ILLUSTRATED ICONS for product thumbs (no real brand art) ----------
-// Amber spirit/whisky bottle — warm gold glass, dark cap, liquid fill
+// Populate the form (and header) with any previously saved address on load
+populateAddressForm();
+updateHeaderLocation();
+
+// Re-populate every time the sheet is opened, in case it was saved elsewhere
+document.querySelector('.location-row').addEventListener('click', populateAddressForm);
+
+// ---------- ORIGINAL ILLUSTRATED ICONS for product thumbs ----------
 const whiskyBottleSVG = `<svg viewBox="0 0 40 64" fill="none">
   <path d="M15 2h10v8l4 6v42a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3V16l4-6V2z" fill="#3A2A14" stroke="#C9A15A" stroke-width="1.2"/>
   <path d="M12 30h16v27a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3V30z" fill="#B8791E"/>
@@ -914,7 +1480,6 @@ const whiskyBottleSVG = `<svg viewBox="0 0 40 64" fill="none">
   <rect x="13" y="22" width="14" height="9" rx="1.5" fill="#150F0D" stroke="#C9A15A" stroke-width="0.8"/>
   <text x="20" y="28" font-family="serif" font-size="5" fill="#C9A15A" text-anchor="middle">EST</text>
 </svg>`;
-// Wine bottle — deep bordeaux glass, foil neck
 const wineBottleSVG = `<svg viewBox="0 0 36 64" fill="none">
   <path d="M14 2h8v8l3.5 5.5V58a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4V15.5L14 10V2z" fill="#3D0F1E" stroke="#C9A15A" stroke-width="1.1"/>
   <rect x="14" y="2" width="8" height="7" fill="#8C1F3B"/>
@@ -923,7 +1488,6 @@ const wineBottleSVG = `<svg viewBox="0 0 36 64" fill="none">
   <rect x="10.5" y="38" width="15" height="10" fill="#150F0D" stroke="#C9A15A" stroke-width="0.6"/>
   <line x1="12" y1="42" x2="24" y2="42" stroke="#C9A15A" stroke-width="0.6"/>
 </svg>`;
-// Beer bottle — brown glass, foamy neck highlight, cap
 const beerBottleSVG = `<svg viewBox="0 0 34 64" fill="none">
   <path d="M14 2h6v9l3 5v42a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V16l3-5V2z" fill="#5C3410" stroke="#C9A15A" stroke-width="1.1"/>
   <rect x="14" y="2" width="6" height="5" fill="#232323" stroke="#C9A15A" stroke-width="0.8"/>
@@ -931,7 +1495,6 @@ const beerBottleSVG = `<svg viewBox="0 0 34 64" fill="none">
   <ellipse cx="17" cy="17" rx="4" ry="4" fill="#F0D9A8" opacity="0.35"/>
   <rect x="9.5" y="24" width="15" height="8" rx="1" fill="#150F0D" stroke="#C9A15A" stroke-width="0.6"/>
 </svg>`;
-// Beer can — gold/silver metallic, ring pull
 const canSVG = `<svg viewBox="0 0 34 52" fill="none">
   <rect x="6" y="6" width="22" height="42" rx="10" fill="#B8791E" stroke="#C9A15A" stroke-width="1.1"/>
   <ellipse cx="17" cy="6" rx="11" ry="3" fill="#E4C98A" stroke="#C9A15A" stroke-width="1"/>
@@ -939,27 +1502,23 @@ const canSVG = `<svg viewBox="0 0 34 52" fill="none">
   <rect x="6" y="20" width="22" height="14" fill="#150F0D" opacity="0.85"/>
   <circle cx="17" cy="6" r="2.4" fill="none" stroke="#5C3D0E" stroke-width="1"/>
 </svg>`;
-// Wine glass — for lassi / refreshments / mixers section variety
 const cupSVG = `<svg viewBox="0 0 30 40" fill="none">
   <path d="M7 4h16l-1.6 15c-0.6 5-3 8-6.4 8s-5.8-3-6.4-8L7 4z" fill="#E4C98A" opacity="0.25" stroke="#C9A15A" stroke-width="1.1"/>
   <path d="M8.5 10h13" stroke="#C9A15A" stroke-width="0.8"/>
   <rect x="14" y="27" width="2" height="9" fill="#C9A15A"/>
   <ellipse cx="15" cy="37" rx="7" ry="1.6" fill="none" stroke="#C9A15A" stroke-width="1"/>
 </svg>`;
-// Snack bag — kraft-paper style pouch
 const bagSVG = `<svg viewBox="0 0 34 42" fill="none">
   <path d="M6 12h22l-2 26a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3L6 12z" fill="#7A4415" stroke="#C9A15A" stroke-width="1.1"/>
   <path d="M11 12V8a6 6 0 0 1 12 0v4" stroke="#C9A15A" stroke-width="1.1"/>
   <rect x="9" y="18" width="16" height="6" rx="1" fill="#150F0D" opacity="0.7"/>
 </svg>`;
-// Ice cube tray
 const iceSVG = `<svg viewBox="0 0 40 40" fill="none">
   <rect x="5" y="5" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.3" stroke="#C9A15A" stroke-width="1"/>
   <rect x="21" y="5" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.5" stroke="#C9A15A" stroke-width="1"/>
   <rect x="5" y="21" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.5" stroke="#C9A15A" stroke-width="1"/>
   <rect x="21" y="21" width="14" height="14" rx="2.5" fill="#E4C98A" opacity="0.3" stroke="#C9A15A" stroke-width="1"/>
 </svg>`;
-const bottleSVG = wineBottleSVG;
 
 // ---------- PRODUCT DATA ----------
 function product(brand,name,size,price,mrp,icon,delivery){
@@ -973,6 +1532,10 @@ const catalog = {
     product('Clearwater','Soda Mixer','1L',80,100,cupSVG,'~8 min'),
     product('Frostpack','Ice Cubes','2kg',99,120,iceSVG,'~9 min'),
     product('Rooted','Classic Lassi','200ml',45,55,cupSVG,'~8 min'),
+    product('Sula Vineyards','Sula Red Wine','750ml',950,1100,wineBottleSVG,'~11 min'),
+    product('Fratelli','Fratelli Red Wine','750ml',1100,1300,wineBottleSVG,'~11 min'),
+    product('Royal Stag','Royal Stag Whisky','750ml',850,1000,whiskyBottleSVG,'~10 min'),
+    product('Blenders Pride','Blenders Pride Whisky','750ml',1050,1250,whiskyBottleSVG,'~10 min'),
   ],
   essentials: [
     product('PartyKit','Disposable Cups (Set of 20)','—',149,199,cupSVG,'~11 min'),
@@ -1004,7 +1567,7 @@ const catalog = {
 };
 const brands = ['Highland Reserve','Vinaya Estates','Northfield','Clearwater','Rooted'];
 
-const cart = {}; // key -> qty
+const cart = {};
 
 function cardHTML(key, p){
   const discount = Math.round((1 - p.price/p.mrp)*100);
@@ -1052,19 +1615,11 @@ function renderBrands(){
     </div>`).join('');
 }
 
-function allProducts(){
-  return {
-    'popular': catalog.popular, 'essentials': catalog.essentials, 'combo': catalog.combo,
-    'lassi': catalog.lassi, 'ors': catalog.ors, 'snacks': catalog.snacks
-  };
-}
-
 function changeQty(key, delta){
   const current = cart[key] || 0;
   const next = Math.max(0, current + delta);
   if(next === 0) delete cart[key]; else cart[key] = next;
 
-  // update just that card's add-zone
   const cardEl = document.querySelector(`.card[data-key="${key}"] .add-zone`);
   if(cardEl) cardEl.innerHTML = addZoneHTML(key);
 
@@ -1073,8 +1628,7 @@ function changeQty(key, delta){
 
 function priceOf(key){
   const [prefix, idx] = key.split('-');
-  const map = {popular:'popular', essentials:'essentials', combo:'combo', lassi:'lassi', ors:'ors', snacks:'snacks'};
-  return catalog[map[prefix]][idx].price;
+  return catalog[prefix][idx].price;
 }
 
 function updateCartUI(){
@@ -1093,7 +1647,17 @@ function scrollToCart(){
   document.getElementById('sticky-cart').scrollIntoView({behavior:'smooth', block:'center'});
 }
 
-// ---------- INIT ----------
+function checkout(){
+  const addr = getSavedAddress();
+  if(!addr){
+    alert('Please add a delivery address before checking out.');
+    document.getElementById('location-modal').classList.remove('hidden');
+    return;
+  }
+  alert('Order placed successfully! 🎉\nDelivering to: ' + formatAddress(addr));
+}
+
+// ---------- INIT PRODUCT GRIDS ----------
 renderGrid('popular-grid', catalog.popular, 'popular');
 renderGrid('essentials-grid', catalog.essentials, 'essentials');
 renderGrid('combo-grid', catalog.combo, 'combo');
@@ -1102,1540 +1666,243 @@ renderGrid('ors-grid', catalog.ors, 'ors');
 renderGrid('snacks-grid', catalog.snacks, 'snacks');
 renderBrands();
 updateCartUI();
-  /* ==========================================
-   DRINK IT LOGIN / SIGNUP SYSTEM
-   ========================================== */
 
-function openDrinkLogin() {
+/* ======================================================
+   AUTH (single implementation — replaces the earlier
+   duplicated/contradicting login & signup code)
+   ====================================================== */
+const USER_KEY = 'drinkit_user';
+const LOGGED_IN_KEY = 'drinkit_logged_in';
 
+function openDrinkLogin(){
   closeDrinkAuth();
-
-  document
-    .getElementById("drinkLoginModal")
-    .classList.add("active");
-
+  document.getElementById('drinkLoginModal').classList.add('active');
 }
-
-
-function openDrinkSignup() {
-
+function openDrinkSignup(){
   closeDrinkAuth();
-
-  document
-    .getElementById("drinkSignupModal")
-    .classList.add("active");
-
+  document.getElementById('drinkSignupModal').classList.add('active');
+}
+function closeDrinkAuth(){
+  document.querySelectorAll('.auth-modal').forEach(m=>m.classList.remove('active'));
 }
 
-
-function closeDrinkAuth() {
-
-  document
-    .querySelectorAll(".auth-modal")
-    .forEach(function(modal) {
-
-      modal.classList.remove("active");
-
-    });
-
+function showDrinkMessage(el, text, type){
+  el.textContent = text;
+  el.className = 'auth-message show ' + type;
 }
 
-
-/* ===== SIGNUP ===== */
-
-function drinkSignup(event) {
-
+function drinkSignup(event){
   event.preventDefault();
+  const name = document.getElementById('drinkSignupName').value.trim();
+  const email = document.getElementById('drinkSignupEmail').value.trim().toLowerCase();
+  const age = Number(document.getElementById('drinkSignupAge').value);
+  const password = document.getElementById('drinkSignupPassword').value;
+  const confirmPassword = document.getElementById('drinkConfirmPassword').value;
+  const message = document.getElementById('signupMessage');
+  message.className = 'auth-message';
 
-  const name =
-    document.getElementById("drinkSignupName").value.trim();
-
-  const email =
-    document.getElementById("drinkSignupEmail").value
-      .trim()
-      .toLowerCase();
-
-  const age =
-    Number(document.getElementById("drinkSignupAge").value);
-
-  const password =
-    document.getElementById("drinkSignupPassword").value;
-
-  const confirmPassword =
-    document.getElementById("drinkConfirmPassword").value;
-
-  const message =
-    document.getElementById("signupMessage");
-
-
-  message.className = "auth-message";
-
-
-  if (age < 18) {
-
-    showDrinkMessage(
-      message,
-      "You must meet the applicable legal drinking age.",
-      "error"
-    );
-
+  if(age < 18){
+    showDrinkMessage(message, 'You must meet the applicable legal drinking age.', 'error');
     return;
-
+  }
+  if(password.length < 6){
+    showDrinkMessage(message, 'Password must be at least 6 characters.', 'error');
+    return;
+  }
+  if(password !== confirmPassword){
+    showDrinkMessage(message, 'Passwords do not match.', 'error');
+    return;
   }
 
-
-  if (password.length < 6) {
-
-    showDrinkMessage(
-      message,
-      "Password must be at least 6 characters.",
-      "error"
-    );
-
+  const existingUser = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+  if(existingUser && existingUser.email === email){
+    showDrinkMessage(message, 'An account with this email already exists.', 'error');
     return;
-
   }
 
+  localStorage.setItem(USER_KEY, JSON.stringify({name, email, age, password}));
+  localStorage.setItem(LOGGED_IN_KEY, 'true');
 
-  if (password !== confirmPassword) {
-
-    showDrinkMessage(
-      message,
-      "Passwords do not match.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const existingUser =
-    JSON.parse(localStorage.getItem("drinkItUser") || "null");
-
-
-  if (
-    existingUser &&
-    existingUser.email === email
-  ) {
-
-    showDrinkMessage(
-      message,
-      "An account with this email already exists.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const user = {
-
-    name: name,
-    email: email,
-    age: age,
-    password: password
-
-  };
-
-
-  localStorage.setItem(
-    "drinkItUser",
-    JSON.stringify(user)
-  );
-
-
-  localStorage.setItem(
-    "drinkItLoggedIn",
-    "true"
-  );
-
-
-  showDrinkMessage(
-    message,
-    "Account created successfully! 🎉",
-    "success"
-  );
-
-
-  setTimeout(function() {
-
+  showDrinkMessage(message, 'Account created successfully! 🎉', 'success');
+  setTimeout(function(){
     closeDrinkAuth();
-
     updateDrinkLoginUI();
-
-  }, 1000);
-
+  }, 900);
 }
 
-
-/* ===== LOGIN ===== */
-
-function drinkLogin(event) {
-
+function drinkLogin(event){
   event.preventDefault();
+  const email = document.getElementById('drinkLoginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('drinkLoginPassword').value;
+  const message = document.getElementById('loginMessage');
+  message.className = 'auth-message';
 
-  const email =
-    document.getElementById("drinkLoginEmail").value
-      .trim()
-      .toLowerCase();
-
-  const password =
-    document.getElementById("drinkLoginPassword").value;
-
-  const message =
-    document.getElementById("loginMessage");
-
-
-  message.className = "auth-message";
-
-
-  const user =
-    JSON.parse(
-      localStorage.getItem("drinkItUser") || "null"
-    );
-
-
-  if (!user) {
-
-    showDrinkMessage(
-      message,
-      "No account found. Please Sign Up first.",
-      "error"
-    );
-
+  const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+  if(!user){
+    showDrinkMessage(message, 'No account found. Please sign up first.', 'error');
     return;
-
+  }
+  if(user.email !== email || user.password !== password){
+    showDrinkMessage(message, 'Incorrect email or password.', 'error');
+    return;
   }
 
-
-  if (
-    user.email !== email ||
-    user.password !== password
-  ) {
-
-    showDrinkMessage(
-      message,
-      "Incorrect email or password.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  localStorage.setItem(
-    "drinkItLoggedIn",
-    "true"
-  );
-
-
-  showDrinkMessage(
-    message,
-    "Login successful! Welcome back 👋",
-    "success"
-  );
-
-
-  setTimeout(function() {
-
+  localStorage.setItem(LOGGED_IN_KEY, 'true');
+  showDrinkMessage(message, 'Login successful! Welcome back 👋', 'success');
+  setTimeout(function(){
     closeDrinkAuth();
-
     updateDrinkLoginUI();
-
-  }, 800);
-
+  }, 700);
 }
 
-
-/* ===== LOGOUT ===== */
-
-function drinkLogout() {
-
-  localStorage.removeItem("drinkItLoggedIn");
-
+function drinkLogout(){
+  localStorage.removeItem(LOGGED_IN_KEY);
   updateDrinkLoginUI();
-
-  alert("You have been logged out.");
-
 }
 
-
-/* ===== FORGOT PASSWORD ===== */
-
-function drinkForgotPassword() {
-
-  const user =
-    JSON.parse(
-      localStorage.getItem("drinkItUser") || "null"
-    );
-
-  if (!user) {
-
-    alert(
-      "No account found. Please create an account first."
-    );
-
+function drinkForgotPassword(){
+  const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+  if(!user){
+    alert('No account found. Please create an account first.');
     return;
-
   }
-
-
-  const email =
-    prompt("Enter your registered email address:");
-
-
-  if (!email) return;
-
-
-  if (
-    email.trim().toLowerCase() !== user.email
-  ) {
-
-    alert("Email address not found.");
-
+  const email = prompt('Enter your registered email address:');
+  if(!email) return;
+  if(email.trim().toLowerCase() !== user.email){
+    alert('Email address not found.');
     return;
-
   }
-
-
-  alert(
-    "For security, password reset should be connected to a real email service/backend."
-  );
-
+  alert('For security, password reset should be connected to a real email service/backend.');
 }
 
+function updateDrinkLoginUI(){
+  const loggedIn = localStorage.getItem(LOGGED_IN_KEY) === 'true';
+  const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
 
-/* ===== MESSAGE ===== */
-
-function showDrinkMessage(
-  element,
-  text,
-  type
-) {
-
-  element.textContent = text;
-
-  element.className =
-    "auth-message show " + type;
-
-}
-
-
-/* ===== LOGIN UI ===== */
-
-function updateDrinkLoginUI() {
-
-  const loggedIn =
-    localStorage.getItem("drinkItLoggedIn") === "true";
-
-
-  const user =
-    JSON.parse(
-      localStorage.getItem("drinkItUser") || "null"
-    );
-
-
-  const loginButtons =
-    document.querySelectorAll(
-      ".drink-login-button"
-    );
-
-  const signupButtons =
-    document.querySelectorAll(
-      ".drink-signup-button"
-    );
-
-  const logoutButtons =
-    document.querySelectorAll(
-      ".drink-logout-button"
-    );
-
-
-  loginButtons.forEach(function(button) {
-
-    button.style.display =
-      loggedIn ? "none" : "inline-block";
-
+  document.querySelectorAll('.drink-login-button').forEach(btn=>{
+    btn.style.display = loggedIn ? 'none' : 'flex';
+  });
+  document.querySelectorAll('.drink-logout-button').forEach(btn=>{
+    btn.style.display = loggedIn ? 'flex' : 'none';
   });
 
-
-  signupButtons.forEach(function(button) {
-
-    button.style.display =
-      loggedIn ? "none" : "inline-block";
-
-  });
-
-
-  logoutButtons.forEach(function(button) {
-
-    button.style.display =
-      loggedIn ? "inline-block" : "none";
-
-  });
-
-
-  if (loggedIn && user) {
-
-    document.title =
-      "Drink It - " + user.name;
-
+  const headerActions = document.getElementById('header-actions');
+  let chip = document.getElementById('drink-user-chip');
+  if(loggedIn && user){
+    if(!chip){
+      chip = document.createElement('span');
+      chip.id = 'drink-user-chip';
+      chip.className = 'user-chip';
+      headerActions.prepend(chip);
+    }
+    chip.textContent = user.name.split(' ')[0];
+    document.title = 'Drink It - ' + user.name;
   } else {
-
-    document.title = "Drink It";
-
+    if(chip) chip.remove();
+    document.title = 'Drink It';
   }
-
 }
 
-
-/* ===== CLOSE MODAL ON BACKGROUND CLICK ===== */
-
-document.addEventListener(
-  "click",
-  function(event) {
-
-    if (
-      event.target.classList.contains(
-        "auth-modal"
-      )
-    ) {
-
-      closeDrinkAuth();
-
-    }
-
-  }
-);
-
-
-/* ===== ESC KEY ===== */
-
-document.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (event.key === "Escape") {
-
-      closeDrinkAuth();
-
-    }
-
-  }
-);
-
-
-/* ===== CHECK LOGIN ON PAGE LOAD ===== */
+document.addEventListener('click', function(event){
+  if(event.target.classList.contains('auth-modal')) closeDrinkAuth();
+});
+document.addEventListener('keydown', function(event){
+  if(event.key === 'Escape') closeDrinkAuth();
+});
 
 updateDrinkLoginUI();
 
-/* ================= DRINK IT EXTRA FEATURES ================= */
-
-/* 1. AUTO OPEN LOGIN AFTER AGE CONFIRMATION */
-
-const oldConfirmAge = confirmAge;
-
-confirmAge = function () {
-  oldConfirmAge();
-
-  setTimeout(function () {
-    if (typeof openDrinkLogin === "function") {
-      openDrinkLogin();
-    }
-  }, 400);
-};
-
-
-/* 2. USER NAME TOP RIGHT */
-
-function showDrinkUserName() {
-
-  const user = JSON.parse(
-    localStorage.getItem("drinkit_user")
-  );
-
-  if (!user) return;
-
-  let box = document.getElementById("drinkUserName");
-
-  if (!box) {
-
-    box = document.createElement("span");
-
-    box.id = "drinkUserName";
-
-    box.style.cssText = `
-      background:#111;
-      color:#ffd600;
-      padding:8px 12px;
-      border-radius:20px;
-      font-weight:700;
-      font-size:13px;
-      margin-right:8px;
-    `;
-
-    const headerActions =
-      document.querySelector(".header-actions");
-
-    if (headerActions) {
-      headerActions.prepend(box);
-    }
-  }
-
-  box.textContent = "👤 " + user.name;
-}
-
-
-/* 3. LOGIN */
-
-function openDrinkLogin() {
-
-  if (document.getElementById("drinkLoginBox")) return;
-
-  const box = document.createElement("div");
-
-  box.id = "drinkLoginBox";
-
-  box.style.cssText = `
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.7);
-    z-index:99999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-  `;
-
-  box.innerHTML = `
-    <div style="
-      background:white;
-      padding:25px;
-      border-radius:20px;
-      width:100%;
-      max-width:400px;
-    ">
-
-      <h2>Welcome Back 👋</h2>
-
-      <input
-        id="drinkLoginEmail"
-        type="email"
-        placeholder="Email Address"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:15px;
-          border:1px solid #ddd;
-          border-radius:10px;
-        "
-      >
-
-      <input
-        id="drinkLoginPassword"
-        type="password"
-        placeholder="Password"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-        "
-      >
-
-      <button
-        onclick="drinkLogin()"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:15px;
-          background:#ffd600;
-          border:0;
-          border-radius:10px;
-          font-weight:bold;
-        "
-      >
-        Login
-      </button>
-
-      <button
-        onclick="drinkSignup()"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:10px;
-          background:#111;
-          color:white;
-          border:0;
-          border-radius:10px;
-        "
-      >
-        Create Account
-      </button>
-
-    </div>
-  `;
-
-  document.body.appendChild(box);
-}
-
-
-/* 4. SIGN UP */
-
-function drinkSignup() {
-
-  const box =
-    document.getElementById("drinkLoginBox");
-
-  if (box) box.remove();
-
-  const signup = document.createElement("div");
-
-  signup.id = "drinkSignupBox";
-
-  signup.style.cssText = `
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.7);
-    z-index:99999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-  `;
-
-  signup.innerHTML = `
-    <div style="
-      background:white;
-      padding:25px;
-      border-radius:20px;
-      width:100%;
-      max-width:400px;
-    ">
-
-      <h2>Create Account 🍷</h2>
-
-      <input
-        id="drinkName"
-        placeholder="Full Name"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:15px;
-          border:1px solid #ddd;
-          border-radius:10px;
-        "
-      >
-
-      <input
-        id="drinkEmail"
-        type="email"
-        placeholder="Email Address"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-        "
-      >
-
-      <input
-        id="drinkPassword"
-        type="password"
-        placeholder="Create Password"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-        "
-      >
-
-      <input
-        id="drinkAge"
-        type="number"
-        placeholder="Age"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-        "
-      >
-
-      <button
-        onclick="createDrinkAccount()"
-        style="
-          width:100%;
-          padding:13px;
-          margin-top:15px;
-          background:#ffd600;
-          border:0;
-          border-radius:10px;
-          font-weight:bold;
-        "
-      >
-        Sign Up
-      </button>
-
-    </div>
-  `;
-
-  document.body.appendChild(signup);
-}
-
-
-function createDrinkAccount() {
-
-  const name =
-    document.getElementById("drinkName").value.trim();
-
-  const email =
-    document.getElementById("drinkEmail").value.trim();
-
-  const password =
-    document.getElementById("drinkPassword").value;
-
-  const age =
-    Number(
-      document.getElementById("drinkAge").value
-    );
-
-  if (!name || !email || !password || !age) {
-
-    alert("Please fill all details.");
-    return;
-
-  }
-
-  if (age < 18) {
-
-    alert(
-      "You must meet the applicable legal drinking age."
-    );
-
+/* ======================================================
+   FEATURE ACTIONS (Lever Point / Party Buddy / Safe Ride)
+   ====================================================== */
+function leverPoint(){
+  const bottles = prompt('How many empty bottles do you want to return?');
+  if(bottles === null) return;
+  const quantity = Number(bottles);
+  if(!Number.isInteger(quantity) || quantity < 1){
+    alert('Please enter a valid number of bottles.');
     return;
   }
-
-  localStorage.setItem(
-    "drinkit_user",
-    JSON.stringify({
-      name:name,
-      email:email,
-      password:password
-    })
-  );
-
-  localStorage.setItem(
-    "drinkit_logged",
-    "yes"
-  );
-
-  const signup =
-    document.getElementById("drinkSignupBox");
-
-  if (signup) signup.remove();
-
-  showDrinkUserName();
-
-  alert("Account created successfully!");
+  const reward = quantity * 5;
+  alert('Lever Points\n\nBottles: ' + quantity + '\nReward: ₹' + reward + '\n\n₹5 will be credited per bottle.');
 }
 
-
-/* 5. LOGIN CHECK */
-
-function drinkLogin() {
-
-  const email =
-    document
-      .getElementById("drinkLoginEmail")
-      .value.trim();
-
-  const password =
-    document
-      .getElementById("drinkLoginPassword")
-      .value;
-
-  const user =
-    JSON.parse(
-      localStorage.getItem("drinkit_user")
-    );
-
-  if (
-    user &&
-    user.email === email &&
-    user.password === password
-  ) {
-
-    localStorage.setItem(
-      "drinkit_logged",
-      "yes"
-    );
-
-    document
-      .getElementById("drinkLoginBox")
-      ?.remove();
-
-    showDrinkUserName();
-
-    alert("Login successful!");
-
-  } else {
-
-    alert(
-      "Account not found. Please Sign Up first."
-    );
-
-  }
-}
-
-
-/* 6. WINE + WHISKY PRODUCTS */
-
-if (typeof catalog !== "undefined") {
-
-  catalog.popular.push(
-
-    {
-      brand:"Sula Vineyards",
-      name:"Sula Red Wine",
-      size:"750ml",
-      price:950,
-      mrp:1100,
-      icon:wineBottleSVG,
-      badge:"",
-      delivery:""
-    },
-
-    {
-      brand:"Fratelli",
-      name:"Fratelli Red Wine",
-      size:"750ml",
-      price:1100,
-      mrp:1300,
-      icon:wineBottleSVG,
-      badge:"",
-      delivery:""
-    },
-
-    {
-      brand:"Royal Stag",
-      name:"Royal Stag Whisky",
-      size:"750ml",
-      price:850,
-      mrp:1000,
-      icon:whiskyBottleSVG,
-      badge:"",
-      delivery:""
-    },
-
-    {
-      brand:"Blenders Pride",
-      name:"Blenders Pride Whisky",
-      size:"750ml",
-      price:1050,
-      mrp:1250,
-      icon:whiskyBottleSVG,
-      badge:"",
-      delivery:""
-    }
-
-  );
-
-}
-
-
-/* 7. YELLOW / BLINKIT STYLE */
-
-const drinkStyle =
-document.createElement("style");
-
-drinkStyle.innerHTML = `
-
-body {
-  background:#fffdf0 !important;
-}
-
-header {
-  background:#ffd600 !important;
-}
-
-.hero {
-  background:#ffd600 !important;
-  color:#111 !important;
-}
-
-.btn-primary,
-.btn-add {
-  background:#ffd600 !important;
-  color:#111 !important;
-}
-
-.card {
-  background:#fff !important;
-}
-
-.delivery-chip {
-  display:none !important;
-}
-
-`;
-
-document.head.appendChild(drinkStyle);
-
-
-/* 8. LEVER POINT */
-
-function openDrinkLeverPoint() {
-
-  const bottles =
-    prompt(
-      "How many bottles do you want to return?"
-    );
-
-  if (!bottles) return;
-
-  const total =
-    Number(bottles) * 5;
-
-  alert(
-    "You will receive ₹" +
-    total +
-    " (₹5 per bottle)."
-  );
-}
-
-
-/* 9. PARTY BUDDY */
-
-function openDrinkPartyBuddy() {
-
-  let people =
-    Number(
-      prompt(
-        "How many people are required? Maximum 2."
-      )
-    );
-
-  if (people < 1 || people > 2) {
-
-    alert(
-      "Maximum 2 people are allowed."
-    );
-
+function partyBuddy(){
+  const people = prompt('How many people do you need for Party Buddy?\nMaximum: 2 people\n₹300 per person');
+  if(people === null) return;
+  const quantity = Number(people);
+  if(!Number.isInteger(quantity) || quantity < 1 || quantity > 2){
+    alert('You can select a maximum of 2 people.');
     return;
   }
+  const total = quantity * 300;
+  alert('Party Buddy\n\nPeople: ' + quantity + '\nPrice: ₹300 per person\nTotal: ₹' + total);
+}
 
-  alert(
-    people +
-    " person(s) × ₹300 = ₹" +
-    (people * 300)
-  );
+function safeRide(){
+  const km = prompt('Enter the distance to your home in kilometres.\n\nCharge: ₹100 per kilometre');
+  if(km === null) return;
+  const distance = Number(km);
+  if(isNaN(distance) || distance <= 0){
+    alert('Please enter a valid distance.');
+    return;
+  }
+  const total = distance * 100;
+  alert('Safe Ride 🚗\n\nDistance: ' + distance + ' km\nRate: ₹100/km\nTotal Charge: ₹' + total);
 }
 
 
-/* 10. CAR / SAFE RIDE */
+/* ======================================================
+   LANDING PAGE + APP NAVIGATION
+   ====================================================== */
+(function() {
+  const host = document.getElementById('landing-host');
+  const template = document.getElementById('landing-template');
+  const shadow = host.attachShadow({mode:'open'});
+  shadow.appendChild(template.content.cloneNode(true));
 
-function openDrinkCar() {
-
-  const km =
-    Number(
-      prompt(
-        "Enter distance in kilometres:"
-      )
-    );
-
-  if (km < 1) return;
-
-  alert(
-    "Car charge = ₹" +
-    (km * 100) +
-    " (₹100 per kilometre)"
-  );
-}
-
-
-/* 11. SAVED ADDRESS */
-
-function saveDrinkAddress(address) {
-
-  localStorage.setItem(
-    "drinkit_address",
-    address
-  );
-
-  alert("Address saved successfully!");
-}
-
-
-/* 12. LOAD USER */
-
-if (
-  localStorage.getItem("drinkit_logged") === "yes"
-) {
-  showDrinkUserName();
-}
-
-/* ================= DRINK IT FIXES ================= */
-
-(function () {
-
-  /* ---------- 1. BETTER TEXT VISIBILITY ---------- */
-
-  const fixStyle = document.createElement("style");
-
-  fixStyle.innerHTML = `
-    body {
-      color: #222 !important;
-    }
-
-    p, span, label, li {
-      color: #333 !important;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      color: #111 !important;
-    }
-
-    /* Dark cards/sections */
-    .card p,
-    .feature-card p,
-    .service-card p,
-    .info-card p,
-    .service p {
-      color: #e8e8e8 !important;
-    }
-
-    .card h1,
-    .card h2,
-    .card h3,
-    .feature-card h1,
-    .feature-card h2,
-    .feature-card h3,
-    .service-card h1,
-    .service-card h2,
-    .service-card h3 {
-      color: #ffffff !important;
-    }
-
-    /* Service titles */
-    .service-card,
-    .feature-card,
-    .info-card {
-      color: #ffffff !important;
-    }
-
-    /* Links/buttons */
-    a, button {
-      font-weight: 700;
-    }
-
-    /* Yellow Blinkit-style buttons */
-    button {
-      border-color: transparent;
-    }
-
-    /* Modal text */
-    .drink-popup p {
-      color: #444 !important;
-    }
-
-    .drink-popup h2 {
-      color: #111 !important;
-    }
-  `;
-
-  document.head.appendChild(fixStyle);
-
-
-  /* ---------- 2. LEVER POINT ---------- */
-
-  function leverPoint() {
-
-    const bottles = prompt(
-      "How many empty bottles do you want to return?"
-    );
-
-    if (bottles === null) return;
-
-    const quantity = Number(bottles);
-
-    if (
-      !Number.isInteger(quantity) ||
-      quantity < 1
-    ) {
-      alert("Please enter a valid number of bottles.");
-      return;
-    }
-
-    const reward = quantity * 5;
-
-    alert(
-      "Lever Points\n\n" +
-      "Bottles: " + quantity + "\n" +
-      "Reward: ₹" + reward +
-      "\n\n₹5 will be credited per bottle."
-    );
+  function openAppFromLanding(event) {
+    event.preventDefault();
+    document.getElementById('landing-host').classList.add('hidden');
+    document.getElementById('app-page').classList.add('visible');
+    window.scrollTo({top:0, behavior:'smooth'});
+    if (typeof updateDrinkLoginUI === 'function') updateDrinkLoginUI();
   }
 
+  shadow.querySelectorAll('[data-open-app]').forEach(function(link) {
+    link.addEventListener('click', openAppFromLanding);
+  });
 
-  /* ---------- 3. PARTY BUDDY ---------- */
-
-  function partyBuddy() {
-
-    const people = prompt(
-      "How many people do you need for Party Buddy?\nMaximum: 2 people\n₹300 per person"
-    );
-
-    if (people === null) return;
-
-    const quantity = Number(people);
-
-    if (
-      !Number.isInteger(quantity) ||
-      quantity < 1 ||
-      quantity > 2
-    ) {
-      alert(
-        "You can select maximum 2 people."
-      );
-      return;
-    }
-
-    const total = quantity * 300;
-
-    alert(
-      "Party Buddy\n\n" +
-      "People: " + quantity + "\n" +
-      "Price: ₹300 per person\n" +
-      "Total: ₹" + total
-    );
-  }
-
-
-  /* ---------- 4. SAFE RIDE ---------- */
-
-  function safeRide() {
-
-    const km = prompt(
-      "Enter the distance to your home in kilometres.\n\nCharge: ₹100 per kilometre"
-    );
-
-    if (km === null) return;
-
-    const distance = Number(km);
-
-    if (
-      isNaN(distance) ||
-      distance <= 0
-    ) {
-      alert("Please enter a valid distance.");
-      return;
-    }
-
-    const total = distance * 100;
-
-    alert(
-      "Safe Ride 🚗\n\n" +
-      "Distance: " + distance + " km\n" +
-      "Rate: ₹100/km\n" +
-      "Total Charge: ₹" + total
-    );
-  }
-
-
-  /* ---------- 5. FIND BUTTON/LINK BY TEXT ---------- */
-
-  function connectFeature(text, action) {
-
-    const elements =
-      document.querySelectorAll(
-        "button, a, div, span"
-      );
-
-    elements.forEach(function (element) {
-
-      const value =
-        element.textContent
-          .trim()
-          .toLowerCase();
-
-      if (
-        value === text.toLowerCase() ||
-        value.includes(text.toLowerCase())
-      ) {
-
-        if (
-          !element.dataset.drinkFeatureConnected
-        ) {
-
-          element.dataset.drinkFeatureConnected =
-            "true";
-
-          element.style.cursor = "pointer";
-
-          element.addEventListener(
-            "click",
-            function (event) {
-
-              event.preventDefault();
-              event.stopPropagation();
-
-              action();
-
-            }
-          );
-        }
-      }
-
+  shadow.querySelectorAll('a[href="#how"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = shadow.getElementById('how');
+      if (target) target.scrollIntoView({behavior:'smooth'});
     });
-  }
+  });
 
+  window.showLandingPage = function() {
+    document.getElementById('app-page').classList.remove('visible');
+    document.getElementById('landing-host').classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
 
-  /* ---------- 6. CONNECT LEVER POINT ---------- */
-
-  connectFeature(
-    "How it works",
-    leverPoint
-  );
-
-  connectFeature(
-    "Lever Point",
-    leverPoint
-  );
-
-
-  /* ---------- 7. CONNECT PARTY BUDDY ---------- */
-
-  connectFeature(
-    "Build my cart",
-    partyBuddy
-  );
-
-  connectFeature(
-    "Party Buddy",
-    partyBuddy
-  );
-
-
-  /* ---------- 8. CONNECT SAFE RIDE ---------- */
-
-  connectFeature(
-    "Get a safe ride",
-    safeRide
-  );
-
-  connectFeature(
-    "Oops! How do I go home?",
-    safeRide
-  );
-
-
-  /* ---------- 9. CART BUY BUTTON ---------- */
-
-  document.addEventListener(
-    "click",
-    function (event) {
-
-      const text =
-        event.target.textContent
-          .trim()
-          .toLowerCase();
-
-      if (
-        text.includes("view cart") ||
-        text.includes("cart")
-      ) {
-
-        setTimeout(function () {
-
-          const cartArea =
-            document.querySelector(
-              ".cart-drawer, .cart-modal, .cart-panel, .cart"
-            );
-
-          if (!cartArea) return;
-
-          if (
-            cartArea.querySelector(
-              ".drink-buy-button"
-            )
-          ) {
-            return;
-          }
-
-          const buyButton =
-            document.createElement("button");
-
-          buyButton.className =
-            "drink-buy-button";
-
-          buyButton.textContent =
-            "Buy Now";
-
-          buyButton.style.cssText = `
-            width:100%;
-            padding:14px;
-            margin-top:15px;
-            background:#ffd600;
-            color:#111;
-            border:none;
-            border-radius:12px;
-            font-size:17px;
-            font-weight:800;
-            cursor:pointer;
-          `;
-
-          buyButton.onclick =
-            function () {
-
-              alert(
-                "Order placed successfully! 🎉"
-              );
-
-            };
-
-          cartArea.appendChild(
-            buyButton
-          );
-
-        }, 300);
-      }
-
-    }
-  );
-
-
-  /* ---------- 10. SAVE ADDRESS ---------- */
-
-  window.saveDrinkAddress =
-    function () {
-
-      const address =
-        prompt(
-          "Enter your delivery address:"
-        );
-
-      if (!address || !address.trim()) {
-        alert("Please enter an address.");
-        return;
-      }
-
-      localStorage.setItem(
-        "drinkit_saved_address",
-        address.trim()
-      );
-
-      alert(
-        "Address saved successfully! 📍"
-      );
-    };
-
-
-  /* ---------- 11. LOAD SAVED ADDRESS ---------- */
-
-  window.getDrinkAddress =
-    function () {
-
-      return localStorage.getItem(
-        "drinkit_saved_address"
-      ) || "";
-    };
-
-
-  console.log(
-    "Drink It features connected successfully."
-  );
-
+  window.showApp = openAppFromLanding;
 })();
-  
+
+/* Shared age gate */
+function confirmAge() {
+  document.getElementById('age-gate').classList.add('hidden');
+  sessionStorage.setItem('drinkit_age_ok','1');
+}
+function declineAge() {
+  document.querySelector('.age-card').innerHTML =
+    '<h1>Come back later</h1><p style="color:var(--muted);font-size:14px;line-height:1.5;">Drink It is only for customers of legal drinking age. Thanks for understanding — see you when you\'re eligible.</p>';
+}
+
+if(sessionStorage.getItem('drinkit_age_ok')==='1') {
+  document.getElementById('age-gate').classList.add('hidden');
+}
 </script>
-  <!-- ===== DRINK IT LOGIN MODAL ===== -->
-
-<div class="auth-modal" id="drinkLoginModal">
-
-  <div class="auth-card">
-
-    <button class="auth-close" onclick="closeDrinkAuth()">×</button>
-
-    <h2>Welcome Back 👋</h2>
-
-    <p class="auth-subtitle">
-      Login to your Drink It account
-    </p>
-
-    <div id="loginMessage" class="auth-message"></div>
-
-    <form onsubmit="drinkLogin(event)">
-
-      <div class="auth-field">
-        <label>Email Address</label>
-
-        <input
-          type="email"
-          id="drinkLoginEmail"
-          placeholder="Enter your email"
-          required
-        >
-      </div>
-
-      <div class="auth-field">
-        <label>Password</label>
-
-        <input
-          type="password"
-          id="drinkLoginPassword"
-          placeholder="Enter your password"
-          required
-        >
-
-        <button
-          type="button"
-          class="auth-forgot"
-          onclick="drinkForgotPassword()">
-          Forgot Password?
-        </button>
-      </div>
-
-      <button class="auth-submit-btn" type="submit">
-        Login
-      </button>
-
-    </form>
-
-    <div class="auth-switch">
-      Don't have an account?
-      <button onclick="openDrinkSignup()">Sign Up</button>
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ===== DRINK IT SIGNUP MODAL ===== -->
-
-<div class="auth-modal" id="drinkSignupModal">
-
-  <div class="auth-card">
-
-    <button class="auth-close" onclick="closeDrinkAuth()">×</button>
-
-    <h2>Create Account 🍷</h2>
-
-    <p class="auth-subtitle">
-      Join Drink It today
-    </p>
-
-    <div id="signupMessage" class="auth-message"></div>
-
-    <form onsubmit="drinkSignup(event)">
-
-      <div class="auth-field">
-
-        <label>Full Name</label>
-
-        <input
-          type="text"
-          id="drinkSignupName"
-          placeholder="Enter your full name"
-          required
-        >
-
-      </div>
-
-      <div class="auth-field">
-
-        <label>Email Address</label>
-
-        <input
-          type="email"
-          id="drinkSignupEmail"
-          placeholder="Enter your email"
-          required
-        >
-
-      </div>
-
-      <div class="auth-field">
-
-        <label>Age</label>
-
-        <input
-          type="number"
-          id="drinkSignupAge"
-          min="18"
-          max="120"
-          placeholder="Enter your age"
-          required
-        >
-
-      </div>
-
-      <div class="auth-field">
-
-        <label>Create Password</label>
-
-        <input
-          type="password"
-          id="drinkSignupPassword"
-          minlength="6"
-          placeholder="Minimum 6 characters"
-          required
-        >
-
-      </div>
-
-      <div class="auth-field">
-
-        <label>Confirm Password</label>
-
-        <input
-          type="password"
-          id="drinkConfirmPassword"
-          minlength="6"
-          placeholder="Confirm your password"
-          required
-        >
-
-      </div>
-
-      <label class="age-confirm">
-
-        <input
-          type="checkbox"
-          id="drinkAgeConfirm"
-          required
-        >
-
-        <span>
-          I confirm that I meet the applicable legal drinking age
-          and understand that alcohol products are restricted to
-          legally eligible customers.
-        </span>
-
-      </label>
-
-      <button class="auth-submit-btn" type="submit">
-        Create Account
-      </button>
-
-    </form>
-
-    <div class="auth-switch">
-      Already have an account?
-      <button onclick="openDrinkLogin()">Login</button>
-    </div>
-
-  </div>
-
-</div>
 </body>
 </html>
